@@ -1,0 +1,7 @@
+*.pyc
+*~
+__pycache__
+nocvenv
+nocnetone/settings.py
+/static
+.DS_Store
