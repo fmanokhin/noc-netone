@@ -8,7 +8,7 @@ class Pop(models.Model):
     contacts = models.TextField()
     manager = models.TextField()
     bandwidth = models.TextField()
-    dnsname = models.TextField()
+    vlans = models.TextField()
     comments = models.TextField()
 
     def new_pop(self):

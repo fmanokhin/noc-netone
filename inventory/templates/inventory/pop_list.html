@@ -1,4 +1,70 @@
+{% load staticfiles %}
+<!doctype html>
 <html>
-    <p>Hi there!</p>
-    <p>It works!</p>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>NET:1 Inventory</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,300" type="text/css">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+      <div id="wrapper">
+		      <header>
+            <a href="/"><img src="{% static 'img/oglogo.png' %}" alt="logo"></a>
+            <h1><a href="tel:+7456462888">+7 (495) 646-28-88</a><h1>
+        </form>
+          </header>
+        <nav>
+    	       <ul class="top-menu">
+    		         <a href="/internet/"><li>ИНТЕРНЕТ</li></a>
+    		         <a href="/telephony"><li>ТЕЛЕФОНИЯ</li></a>
+    		         <a href="/l2vpn/"><li>КАНАЛЫ СВЯЗИ</li></a>
+                 <a href="/inventory/"><li>УЧЕТ ОбОРУДОВАНИЯ</li></a>
+                 <a href="/ipam/"><li>УЧЕТ РЕСУРСОВ IPv4/IPv6</li></a>
+    	       </ul>
+        </nav>
+		  <div id="heading">
+        <h1>Точки присутствия</h1>
+        <form name="search" action="#" method="get">
+        <input type="text" name="q" placeholder="Найти"><button type="submit">ПОИСК</button>
+      </div>
+		  <aside>
+        <nav>
+        	<ul class="aside-menu">
+        		<a href="internet/cores/"><li>Опорные узлы</li></a>
+        		<a href="/internet/pops/"><li>Точки присутствия</li></a>
+        		<a href="internet/vpls/"><li>VPLS-ы</li></a>
+            <a href="internet/blocked/"><li>Блокировки</li></a>
+        	</ul>
+        </nav>
+      </aside>
+		  <section>
+        {% for pop in pops %}
+        <div>
+          <h4><a href="">{{ pop.title }}</a></h1>
+          <p>{{ pop.address|linebreaksbr }}</p>
+        </div>
+        {% endfor %}
+      </section>
+	    </div>
+      <footer>
+            <div id="footer">
+              <div id="sitemap">
+                <h3>КОНТАКТЫ</h3>
+	              <div>
+		            <a href="mailto:noc@netone.ru">NOC</a>
+		            <a href="mailto:support@netone.ru">Служба поддержки</a>
+	              </div>
+              </div>
+		        <div id="copyright">
+              <a href="tel:+74956462888" style="text-decoration: none">+7(495)646-28-88</a>
+              <p>115035, Москва, Садовническая набережная, д. 69</p>
+	          </div>
+          </div>
+      </footer>
+</body>
 </html>
