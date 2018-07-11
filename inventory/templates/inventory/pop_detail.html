@@ -1,0 +1,54 @@
+{% extends 'inventory/base_inet.html' %}
+{% block content %}
+<style type="text/css">
+  h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444444;
+  }
+  table {
+    border-spacing: 0px;
+    border-left: 2px solid #7e7e7e;
+    padding-top: 0px;
+    padding-left: 15px;
+    background-color: #FFFFFF;
+  }
+  .addbutton {
+    color: #fff;
+    background-color: #FF9900;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+</style>
+{% if user.is_authenticated %}
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_edit' pk=pop.pk %}'">
+{% endif %}
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td width="15%"><h4>Подключение:</h4></td>
+    <td><h4>{{ pop.title }}</h4></td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Адрес:</b></td>
+    <td>{{ pop.address|linebreaksbr }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Контакты:</b></td>
+    <td>{{ pop.contacts|linebreaksbr }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Менеджер:</b></td>
+    <td>{{ pop.manager|linebreaksbr }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Ширина канала:</b></td>
+    <td>{{ pop.bandwidth|linebreaksbr }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Комментарий:</b></td>
+    <td>{{ pop.comments|linebreaksbr }}<td>
+  </tr>
+</table>
+{% endblock %}
