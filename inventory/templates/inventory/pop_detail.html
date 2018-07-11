@@ -21,10 +21,30 @@
     font-family: 'Oswald', sans-serif;
     float: right;
   }
+  .delbutton {
+    color: #fff;
+    background-color: #FF0000;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
 </style>
 {% if user.is_authenticated %}
+<script>
+function delconfirm() {
+  var user_choice = window.confirm('Вы уверены?');
+  if(user_choice==true) {
+    window.location='{% url 'pop_remove' pk=pop.pk %}';
+  } else {
+    return false;
+  }
+}
+</script>
+<input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
 <input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_edit' pk=pop.pk %}'">
 {% endif %}
+
 <table width='100%'>
   <tr style="height: 30px;">
     <td width="15%"><h4>Подключение:</h4></td>

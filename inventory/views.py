@@ -3,7 +3,7 @@ from .models import Pop
 from .forms import PopForm
 
 # Create your views here.
-# Отображение списка точек присутствия
+# Отобразить точки присутствия
 def pop_list(request):
     pops = Pop.objects.all()
     return render(request, 'inventory/pop_list.html', {'pops': pops})
@@ -13,7 +13,7 @@ def pop_detail(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     return render(request, 'inventory/pop_detail.html', {'pop': pop})
 
-# Создать новую точку присутствия
+# Создать точку присутствия
 def pop_new(request):
     if request.method == "POST":
         form = PopForm(request.POST)
@@ -25,7 +25,7 @@ def pop_new(request):
         form = PopForm()
     return render(request, 'inventory/pop_edit.html', {'form': form})
 
-# Редактировать существующую точку присутствия
+# Редактировать точку присутствия
 def pop_edit(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     if request.method == "POST":
@@ -37,3 +37,9 @@ def pop_edit(request, pk):
     else:
         form = PopForm(instance=pop)
     return render(request, 'inventory/pop_edit.html', {'form': form})
+
+#Удалить точку присутствия
+def pop_remove(request, pk):
+    pop = get_object_or_404(Pop, pk=pk)
+    pop.delete()
+    return redirect('pop_list')
