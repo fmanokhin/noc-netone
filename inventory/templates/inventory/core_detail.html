@@ -35,54 +35,41 @@
 function delconfirm() {
   var user_choice = window.confirm('Вы уверены?');
   if(user_choice==true) {
-    window.location='{% url 'pop_remove' pk=pop.pk %}';
+    window.location='{% url 'core_remove' pk=core.pk %}';
   } else {
     return false;
   }
 }
 </script>
 <input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_edit' pk=pop.pk %}'">
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_edit' pk=core.pk %}'">
 {% endif %}
-
 <table width='100%'>
   <tr style="height: 30px;">
-    <td width="15%"><h4>Подключение:</h4></td>
-    <td><h4>{{ pop.title }}</h4></td>
+    <td width="15%"><h4>CORE:</h4></td>
+    <td><h4>{{ core.title }}</h4></td>
   </tr>
   <tr style="height: 30px;">
     <td><b>Адрес:</b></td>
-    <td>{{ pop.address|linebreaksbr }}</td>
+    <td>{{ core.address|linebreaksbr }}</td>
   </tr>
   <tr style="height: 30px;">
     <td><b>Контакты:</b></td>
-    <td>{{ pop.contacts|linebreaksbr }}</td>
-  </tr>
-  <tr style="height: 30px;">
-    <td><b>Менеджер:</b></td>
-    <td>{{ pop.manager|linebreaksbr }}</td>
-  </tr>
-  <tr style="height: 30px;">
-    <td><b>Ширина канала:</b></td>
-    <td>{{ pop.bandwidth|linebreaksbr }}</td>
-  </tr>
-  <tr style="height: 30px;">
-    <td><b>Комментарий:</b></td>
-    <td>{{ pop.comments|linebreaksbr }}<td>
+    <td>{{ core.contacts|linebreaksbr }}</td>
   </tr>
 </table>
 
 {% if user.is_authenticated %}
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_downstreams' pk=pop.pk %}'">
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_downstreams' pk=core.pk %}'">
 {% endif %}
 <table width='100%'>
   <tr style="height: 30px;">
-    <td width="15%"><h4>Upstreams:</h4></td>
+    <td width="15%"><h4>Downstreams:</h4></td>
   </tr>
-  {% for i in upstream %}
+  {% for i in downstream %}
   <tr style="height: 30px;">
-    <td><b>Узел:</b></td>
-    <td><a href="{% url 'core_detail' pk=i.pk %}">{{ i }}</a</td>
+    <td><b>Подключение:</b></td>
+    <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
   </tr>
   {% endfor %}
 </table>

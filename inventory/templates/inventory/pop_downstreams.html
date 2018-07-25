@@ -1,0 +1,59 @@
+{% extends 'inventory/base_inet.html' %}
+{% block content %}
+<style type="text/css">
+  h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444444;
+  }
+  table {
+    border-spacing: 0px;
+    border-left: 2px solid #7e7e7e;
+    padding-top: 0px;
+    padding-left: 15px;
+    background-color: #FFFFFF;
+  }
+  .addbutton {
+    color: #fff;
+    background-color: #FF9900;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .delbutton {
+    color: #fff;
+    background-color: #FF0000;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+
+</style>
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td ><h4><p>Существующие:</h4></td>
+    <td ><h4><p>{{ pop.title }}</h4></td>
+  </tr>
+  {% for i in upstream %}
+  <tr style="height: 30px;">
+    <td width='15%'><b>Подключение:</b></td>
+    <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
+    <td><a href="{% url 'pop_downstreams_remove' poppk=pop.pk corepk=i.pk %}">УДАЛИТЬ</a></td>
+  </tr>
+  {% endfor %}
+</table>
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td ><h4><p>Добавить:</h4></td>
+  </tr>
+  {% for x in cores %}
+  <tr style="height: 30px;">
+    <td width='15%'><b>Подключение:</b></td>
+    <td><a href="{% url 'pop_detail' pk=x.pk %}">{{ x }}</a></td>
+    <td><a href="{% url 'pop_downstreams_add' poppk=pop.pk corepk=x.pk %}">ДОБАВИТЬ</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
