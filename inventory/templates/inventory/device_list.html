@@ -1,0 +1,50 @@
+{% extends 'inventory/base_inventory.html' %}
+{% block content %}
+<style type="text/css">
+  h4 a:visited {
+    color: #444444;
+  }
+  h4 a:hover {
+    text-decoration: underline;
+    color: #444444;
+  }
+  table {
+    border-spacing: 0px;
+    border-left: 2px solid #7e7e7e;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    background-color: #FFFFFF;
+  }
+  .addbutton {
+    color: #fff;
+    background-color: #FF9900;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+
+</style>
+{% if user.is_authenticated %}
+<input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'device_new' %}'">
+{% endif %}
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td width="40px"><b>Производитель</td>
+    <td width="40px"><b>Модель</td>
+    <td width="100px"><h4>Имя</a></h1></td>
+    <td width="100px"><b>ip-адрес</b></td>
+    <td width="100px"><b>Адрес</b></td>
+  </tr>
+{% for device in devices %}
+  <tr style="height: 30px;">
+    <td width="40px">{{ device.vendor|linebreaksbr }}</td>
+    <td width="40px">{{ device.model|linebreaksbr }}</td>
+    <td width="100px"><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></h1></td>
+    <td width="100px">{{ device.ipaddress|linebreaksbr }}</td>
+    <td width="100px">{{ device.geoaddress|linebreaksbr }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

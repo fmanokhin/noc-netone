@@ -1,0 +1,29 @@
+{% extends 'inventory/base_inet.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<style type="text/css">
+.editform input[type="text"] {
+    width: 40%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.editform label {
+    display: inline-block;
+    width: 90px;
+    padding-top: 15px;
+}
+</style>
+<h3>Новый клиент:</h3>
+   <span class="editform">
+   <form method="POST">{% csrf_token %}
+       {{ form.as_p }}
+       <button type="submit">СОХРАНИТЬ</button>
+       <button type="cancel" onclick="window.history.back()">ОТМЕНА</button>
+   </form>
+   </span>
+{% endif %}
+{% endblock %}

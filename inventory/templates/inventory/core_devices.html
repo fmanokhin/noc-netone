@@ -34,13 +34,13 @@
 <table width='100%'>
   <tr style="height: 30px;">
     <td ><h4><p>Существующие:</h4></td>
-    <td ><h4><p>{{ customer.title }}</h4></td>
+    <td ><h4><p>{{ device.dnsname }}</h4></td>
   </tr>
-  {% for i in downstream %}
+  {% for i in device %}
   <tr style="height: 30px;">
-    <td width='15%'><b>Клиент:</b></td>
-    <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
-    <td><a href="{% url 'pop_downstreams_remove' poppk=pop.pk customerpk=i.pk %}">УДАЛИТЬ</a></td>
+    <td width='15%'><b>устройство:</b></td>
+    <td><a href="{% url 'device_detail' pk=i.pk %}">{{ i }}</a></td>
+    <td><a href="{% url 'core_device_remove' corepk=core.pk devicepk=i.pk %}">УДАЛИТЬ</a></td>
   </tr>
   {% endfor %}
 </table>
@@ -48,11 +48,11 @@
   <tr style="height: 30px;">
     <td ><h4><p>Добавить:</h4></td>
   </tr>
-  {% for x in customers %}
+  {% for x in devices %}
   <tr style="height: 30px;">
-    <td width='15%'><b>Клиент:</b></td>
-    <td><a href="{% url 'pop_detail' pk=x.pk %}">{{ x }}</a></td>
-    <td><a href="{% url 'pop_downstreams_add' poppk=pop.pk customerpk=x.pk %}">ДОБАВИТЬ</a></td>
+    <td width='15%'><b>Подключение:</b></td>
+    <td><a href="{% url 'device_detail' pk=x.pk %}">{{ x }}</a></td>
+    <td><a href="{% url 'core_device_add' corepk=core.pk devicepk=x.pk %}">ДОБАВИТЬ</a></td>
   </tr>
   {% endfor %}
 </table>

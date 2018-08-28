@@ -71,9 +71,29 @@ function delconfirm() {
     <td>{{ pop.comments|linebreaksbr }}<td>
   </tr>
 </table>
+{% if user.is_authenticated %}
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_devices' pk=pop.pk %}'">
+{% endif %}
+<table width='100%'>
+  <tr style="height: 20px;">
+    <td width="15%"><h4>Оборудование:</h4></td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Модель:</b></td>
+    <td><b>Имя:</b></td>
+    <td><b>Прочее:</b></td>
+  </tr>
+  {% for d in device %}
+  <tr style="height: 30px;">
+    <td><b>{{d.vendor}} {{d.model}}</b></td>
+    <td><a href="{% url 'device_detail' pk=d.pk %}">{{ d }}</a</td>
+    <td><a href = "telnet://{{d.ipaddress}}">connect</td>
+  </tr>
+  {% endfor %}
+</table>
 
 {% if user.is_authenticated %}
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_downstreams' pk=pop.pk %}'">
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_upstreams' pk=pop.pk %}'">
 {% endif %}
 <table width='100%'>
   <tr style="height: 30px;">
@@ -83,6 +103,21 @@ function delconfirm() {
   <tr style="height: 30px;">
     <td><b>Узел:</b></td>
     <td><a href="{% url 'core_detail' pk=i.pk %}">{{ i }}</a</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% if user.is_authenticated %}
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'pop_downstreams' pk=pop.pk %}'">
+{% endif %}
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td width="15%"><h4>Downstreams:</h4></td>
+  </tr>
+  {% for x in downstream %}
+  <tr style="height: 30px;">
+    <td><b>Клиент:</b></td>
+    <td><a href="{% url 'customer_detail' pk=x.pk %}">{{ x }}</a</td>
   </tr>
   {% endfor %}
 </table>

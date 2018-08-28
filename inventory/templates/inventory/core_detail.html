@@ -60,6 +60,27 @@ function delconfirm() {
 </table>
 
 {% if user.is_authenticated %}
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_devices' pk=core.pk %}'">
+{% endif %}
+<table width='100%'>
+  <tr style="height: 20px;">
+    <td width="15%"><h4>Оборудование:</h4></td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Модель:</b></td>
+    <td><b>Имя:</b></td>
+    <td><b>Прочее:</b></td>
+  </tr>
+  {% for d in device %}
+  <tr style="height: 30px;">
+    <td><b>{{d.vendor}} {{d.model}}</b></td>
+    <td><a href="{% url 'device_detail' pk=d.pk %}">{{ d }}</a</td>
+    <td><a href = "telnet://{{d.ipaddress}}">connect</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% if user.is_authenticated %}
 <input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_downstreams' pk=core.pk %}'">
 {% endif %}
 <table width='100%'>

@@ -1,0 +1,42 @@
+{% extends 'inventory/base_inet.html' %}
+{% block content %}
+<style type="text/css">
+  h4 a:visited {
+    color: #444444;
+  }
+  h4 a:hover {
+    text-decoration: underline;
+    color: #444444;
+  }
+  table {
+    border-spacing: 0px;
+    border-left: 2px solid #7e7e7e;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    background-color: #FFFFFF;
+  }
+  .addbutton {
+    color: #fff;
+    background-color: #FF9900;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+
+</style>
+{% if user.is_authenticated %}
+<input class="addbutton" type="button" value="ДОБАВИТЬ КЛИЕНТА" onclick="location.href='{% url 'customer_new' %}'">
+{% endif %}
+<table width='100%'>
+        {% for customer in customers %}
+
+          <tr style="height: 30px;">
+            <td width="300px"><h4><a href="{% url 'customer_detail' pk=customer.pk %}">{{ customer.title }}</a></h1></td>
+            <td>{{ customer.address|linebreaksbr }}</td>
+          </tr>
+
+        {% endfor %}
+</table>
+{% endblock %}
