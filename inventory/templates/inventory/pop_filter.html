@@ -1,0 +1,13 @@
+{% extends 'inventory/base_inet.html' %}
+
+{% block content %}
+  <form method="POST">{% csrf_token %}
+    {{ filter.form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+  {% for pop in filter.qs %}
+    <li>{{ pop.title }}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

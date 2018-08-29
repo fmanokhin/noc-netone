@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from .models import Pop, Core, Customer, Device
 from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm
+from .filters import PopFilter
 
 # Create your views here.
 # Отобразить точки присутствия
@@ -117,8 +118,16 @@ def core_downstreams(request, pk):
     core = get_object_or_404(Core, pk=pk)
     pops = Pop.objects.all()
     downstream = Core.objects.get(pk=pk).pop_set.all()
-    context = {'core': core, 'downstream': downstream, 'pops': pops}
+    popfilter = PopFilter(request.POST, queryset=pops)
+    context = {'core': core, 'downstream': downstream, 'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/core_downstreams.html', context)
+
+#def core_downstreams(request, pk):
+#    core = get_object_or_404(Core, pk=pk)
+#    pops = Pop.objects.all()
+#    downstream = Core.objects.get(pk=pk).pop_set.all()
+#    context = {'core': core, 'downstream': downstream, 'pops': pops}
+#    return render(request, 'inventory/core_downstreams.html', context)
 
 def core_downstreams_remove(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
@@ -300,3 +309,9 @@ def device_remove(request, pk):
     device = get_object_or_404(Device, pk=pk)
     device.delete()
     return redirect('device_list')
+
+#Фильтрация
+def popfilter(request):
+    poplist = Pop.objects.all()
+    popfilter = PopFilter(request.POST, queryset=poplist)
+    return render(request, 'inventory/pop_filter.html', {'filter': popfilter})

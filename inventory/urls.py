@@ -56,4 +56,7 @@ urlpatterns = [
     url(r'^inventory/pd/new/$', views.device_new, name='device_new'),
     url(r'^internet/pd/(?P<pk>\d+)/edit/$', views.device_edit, name='device_edit'),
     url(r'^internet/pd/(?P<pk>\d+)/remove/$', views.device_remove, name='device_remove'),
+
+#Фильтры:
+    url(r'^internet/filter/$', views.popfilter, name='popfilter'),
 ]

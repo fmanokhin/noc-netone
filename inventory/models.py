@@ -21,7 +21,9 @@ class Core(models.Model):
 
 # Модель точки присутствия
 class Pop(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True)
+    title.help_text = ''
+    title.verbose_name = ''
     address = models.CharField(max_length=100)
     contacts = models.CharField(max_length=100)
     manager = models.CharField(max_length=100)
