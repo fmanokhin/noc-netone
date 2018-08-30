@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from .models import Pop, Core, Customer, Device
 from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm
-from .filters import PopFilter
+from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter
 
 # Create your views here.
 # Отобразить точки присутствия
@@ -100,7 +100,8 @@ def core_devices(request, pk):
     core = get_object_or_404(Core, pk=pk)
     devices = Device.objects.all()
     device = Core.objects.get(pk=pk).device_set.all()
-    context = {'core': core, 'device': device, 'devices': devices}
+    devicesfilter = DeviceFilter(request.POST, queryset=devices)
+    context = {'core': core, 'device': device, 'devices': devices, 'filter': devicesfilter}
     return render(request, 'inventory/core_devices.html', context)
 
 def core_device_remove(request, corepk, devicepk):
@@ -122,13 +123,6 @@ def core_downstreams(request, pk):
     context = {'core': core, 'downstream': downstream, 'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/core_downstreams.html', context)
 
-#def core_downstreams(request, pk):
-#    core = get_object_or_404(Core, pk=pk)
-#    pops = Pop.objects.all()
-#    downstream = Core.objects.get(pk=pk).pop_set.all()
-#    context = {'core': core, 'downstream': downstream, 'pops': pops}
-#    return render(request, 'inventory/core_downstreams.html', context)
-
 def core_downstreams_remove(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.remove(Core.objects.get(pk=corepk))
@@ -144,7 +138,8 @@ def pop_devices(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     devices = Device.objects.all()
     device = Pop.objects.get(pk=pk).device_set.all()
-    context = {'pop': pop, 'device': device, 'devices': devices}
+    devicesfilter = DeviceFilter(request.POST, queryset=devices)
+    context = {'pop': pop, 'device': device, 'devices': devices, 'filter': devicesfilter}
     return render(request, 'inventory/pop_devices.html', context)
 
 def pop_device_remove(request, poppk, devicepk):
@@ -163,7 +158,8 @@ def pop_upstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     cores = Core.objects.all()
     upstream = Pop.objects.get(pk=pk).core_set.all()
-    context = {'pop': pop, 'upstream': upstream, 'cores': cores}
+    corefilter = CoreFilter(request.POST, queryset=cores)
+    context = {'pop': pop, 'upstream': upstream, 'cores': cores, 'filter': corefilter}
     return render(request, 'inventory/pop_upstreams.html', context)
 
 def pop_upstreams_remove(request, poppk, corepk):
@@ -181,7 +177,8 @@ def pop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     customers = Customer.objects.all()
     downstream = Pop.objects.get(pk=pk).customer_set.all()
-    context = {'pop': pop, 'downstream': downstream, 'customers': customers}
+    customerfilter = CustomerFilter(request.POST, queryset=customers)
+    context = {'pop': pop, 'downstream': downstream, 'customers': customers, 'filter': customerfilter}
     return render(request, 'inventory/pop_downstreams.html', context)
 
 def pop_downstreams_remove(request, customerpk, poppk):
@@ -199,7 +196,8 @@ def customer_upstreams(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     pops = Pop.objects.all()
     upstream = Customer.objects.get(pk=pk).pop_set.all()
-    context = {'customer': customer, 'upstream': upstream, 'pops': pops}
+    popfilter = PopFilter(request.POST, queryset=pops)
+    context = {'customer': customer, 'upstream': upstream, 'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/customer_upstreams.html', context)
 
 def customer_upstreams_remove(request, customerpk, poppk):

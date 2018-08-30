@@ -18,6 +18,7 @@
     background-color: #FF9900;
     border: none;
     height: 32px;
+    width: 72px;
     font-family: 'Oswald', sans-serif;
     float: right;
   }
@@ -26,6 +27,16 @@
     background-color: #FF0000;
     border: none;
     height: 32px;
+    width: 72px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .filterbutton {
+    color: #fff;
+    background-color: #999999;
+    border: none;
+    height: 32px;
+    width: 72px;
     font-family: 'Oswald', sans-serif;
     float: right;
   }
@@ -40,19 +51,24 @@
   <tr style="height: 30px;">
     <td width='15%'><b>Подключение:</b></td>
     <td><a href="{% url 'customer_detail' pk=i.pk %}">{{ i }}</a></td>
-    <td><a href="{% url 'customer_upstreams_remove' customerpk=customer.pk poppk=i.pk %}">УДАЛИТЬ</a></td>
+    <td><input class="delbutton" type="button" value="УДАЛИТЬ" onclick="location.href='{% url 'customer_upstreams_remove' customerpk=customer.pk poppk=i.pk %}'"></td>
   </tr>
   {% endfor %}
-</table>
-<table width='100%'>
   <tr style="height: 30px;">
     <td ><h4><p>Добавить:</h4></td>
+    <td>
+      <form method="POST">{% csrf_token %}
+      {{ filter.form.as_p }}
+    </td>
+    <td>
+      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+    </td>
   </tr>
-  {% for x in pops %}
+  {% for pop in filter.qs %}
   <tr style="height: 30px;">
     <td width='15%'><b>Подключение:</b></td>
-    <td><a href="{% url 'customer_detail' pk=x.pk %}">{{ x }}</a></td>
-    <td><a href="{% url 'customer_upstreams_add' customerpk=customer.pk poppk=x.pk %}">ДОБАВИТЬ</a></td>
+    <td><a href="{% url 'customer_detail' pk=pop.pk %}">{{ pop.title }}</a></td>
+    <td><input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'customer_upstreams_add' customerpk=customer.pk poppk=pop.pk %}'"></td>
   </tr>
   {% endfor %}
 </table>

@@ -3,7 +3,9 @@ from django.db import models
 # Create your models here.
 # Модель узла
 class Core(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True)
+    title.help_text = ''
+    title.verbose_name = ''
     address = models.CharField(max_length=100)
     contacts = models.CharField(max_length=100)
     devices = models.ManyToManyField('Device', blank=True)
@@ -48,7 +50,9 @@ class Pop(models.Model):
 
 #Модель Клиента
 class Customer(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, blank=True)
+    title.help_text = ''
+    title.verbose_name = ''
     address = models.CharField(max_length=100)
     contacts = models.CharField(max_length=100)
     manager = models.CharField(max_length=100)
@@ -70,7 +74,9 @@ class Customer(models.Model):
 class Device(models.Model):
     vendor = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
-    dnsname = models.CharField(max_length=100)
+    dnsname = models.CharField(max_length=100, blank=True)
+    dnsname.help_text = ''
+    dnsname.verbose_name = ''
     ipaddress = models.CharField(max_length=100)
     geoaddress = models.CharField(max_length=100)
     coreaddress = models.ManyToManyField(Core, blank='True')
