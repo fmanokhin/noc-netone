@@ -21,6 +21,16 @@
     background-color: #FF9900;
     border: none;
     height: 32px;
+    width: 72px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .filterbutton {
+    color: #fff;
+    background-color: #999999;
+    border: none;
+    height: 32px;
+    width: 72px;
     font-family: 'Oswald', sans-serif;
     float: right;
   }
@@ -31,19 +41,31 @@
 {% endif %}
 <table width='100%'>
   <tr style="height: 30px;">
-    <td width="40px"><b>Производитель</td>
-    <td width="40px"><b>Модель</td>
-    <td width="100px"><h4>Имя</a></h1></td>
-    <td width="100px"><b>ip-адрес</b></td>
-    <td width="100px"><b>Адрес</b></td>
+    <td>
+      <form method="POST">{% csrf_token %}
+      {{ filter.form.as_p }}
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+    </td>
   </tr>
-{% for device in devices %}
   <tr style="height: 30px;">
-    <td width="40px">{{ device.vendor|linebreaksbr }}</td>
-    <td width="40px">{{ device.model|linebreaksbr }}</td>
-    <td width="100px"><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></h1></td>
-    <td width="100px">{{ device.ipaddress|linebreaksbr }}</td>
-    <td width="100px">{{ device.geoaddress|linebreaksbr }}</td>
+    <td><b>Производитель</td>
+    <td><b>Модель</td>
+    <td><h4>Имя</a></h1></td>
+    <td><b>ip-адрес</b></td>
+    <td><b>Адрес</b></td>
+  </tr>
+{% for device in filter.qs %}
+  <tr style="height: 30px;">
+    <td>{{ device.vendor|linebreaksbr }}</td>
+    <td>{{ device.model|linebreaksbr }}</td>
+    <td><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></h1></td>
+    <td>{{ device.ipaddress|linebreaksbr }}</td>
+    <td>{{ device.geoaddress|linebreaksbr }}</td>
   </tr>
 {% endfor %}
 </table>

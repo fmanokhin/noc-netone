@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Pop, Core, Customer, Device
+from .models import Pop, Core, Customer, Device, Network
 
 class PopForm(forms.ModelForm):
 
@@ -31,3 +31,9 @@ class DeviceForm(forms.ModelForm):
     class Meta:
         model = Device
         fields = ('vendor', 'model', 'dnsname', 'ipaddress', 'geoaddress')
+
+class NetworkForm(forms.ModelForm):
+
+    class Meta:
+        model = Network
+        fields = ('network','comment',)

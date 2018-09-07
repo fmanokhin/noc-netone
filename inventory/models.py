@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.validators import RegexValidator
+ipaddrvalid = RegexValidator(r"^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
 # Create your models here.
 # Модель узла
 class Core(models.Model):
@@ -27,11 +28,11 @@ class Pop(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100)
+    contacts = models.CharField(max_length=100, blank=True)
     manager = models.CharField(max_length=100)
-    bandwidth = models.CharField(max_length=100)
+    bandwidth = models.CharField(max_length=100, blank=True)
     vlans = models.CharField(max_length=100)
-    comments = models.CharField(max_length=100)
+    comments = models.CharField(max_length=100, blank=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -56,7 +57,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=100)
     contacts = models.CharField(max_length=100)
     manager = models.CharField(max_length=100)
-    comments = models.CharField(max_length=100)
+    comments = models.CharField(max_length=100, blank=True)
     upstream = models.ManyToManyField(Pop, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
@@ -91,3 +92,13 @@ class Device(models.Model):
 
     def __str__(self):
         return self.dnsname
+
+class Network(models.Model):
+    network = models.CharField(max_length=18, validators=[ipaddrvalid])
+    comment = models.CharField(max_length=100, blank=True)
+
+    def new_network(self):
+        self.save()
+
+    def __str__(self):
+        return self.network

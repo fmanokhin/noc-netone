@@ -21,22 +21,40 @@
     background-color: #FF9900;
     border: none;
     height: 32px;
+    width: 72px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .filterbutton {
+    color: #fff;
+    background-color: #999999;
+    border: none;
+    height: 32px;
+    width: 72px;
     font-family: 'Oswald', sans-serif;
     float: right;
   }
 
 </style>
 {% if user.is_authenticated %}
-<input class="addbutton" type="button" value="ДОБАВИТЬ УЗЕЛ" onclick="location.href='{% url 'core_new' %}'">
+<input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'core_new' %}'">
 {% endif %}
 <table width='100%'>
-        {% for core in cores %}
+<tr style="height: 30px;">
+  <td>
+    <form method="POST">{% csrf_token %}
+    {{ filter.form.as_p }}
+  </td>
+  <td>
+    <button class="filterbutton" type="submit">ФИЛЬТР</button>
+  </td>
+</tr>
 
-          <tr style="height: 30px;">
-            <td width="300px"><h4><a href="{% url 'core_detail' pk=core.pk %}">{{ core.title }}</a></h1></td>
-            <td>{{ core.address|linebreaksbr }}</td>
-          </tr>
-
-        {% endfor %}
+{% for core in filter.qs %}
+<tr style="height: 30px;">
+  <td width="300px"><h4><a href="{% url 'core_detail' pk=core.pk %}">{{ core.title }}</a></h1></td>
+  <td>{{ core.address|linebreaksbr }}</td>
+</tr>
+{% endfor %}
 </table>
 {% endblock %}

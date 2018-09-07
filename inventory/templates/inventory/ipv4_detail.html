@@ -1,0 +1,77 @@
+{% extends 'inventory/base_ipam.html' %}
+{% block content %}
+<style type="text/css">
+  h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444444;
+  }
+  table {
+    border-spacing: 0px;
+    border-left: 2px solid #7e7e7e;
+    padding-top: 0px;
+    padding-left: 15px;
+    background-color: #FFFFFF;
+  }
+  .addbutton {
+    color: #fff;
+    background-color: #FF9900;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .delbutton {
+    color: #fff;
+    background-color: #FF0000;
+    border: none;
+    height: 32px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+</style>
+
+{% if user.is_authenticated %}
+<script>
+function delconfirm() {
+  var user_choice = window.confirm('Вы уверены?');
+  if(user_choice==true) {
+    window.location='{% url 'ipv4_remove' pk=ipv4network.pk %}';
+  } else {
+    return false;
+  }
+}
+</script>
+
+<input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
+<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'ipv4_edit' pk=ipv4network.pk %}'">
+{% endif %}
+
+<table width='100%'>
+  <tr style="height: 30px;">
+    <td width="15%"><h4>IP Сеть:</h4></td>
+    <td><h4>{{ ipv4network.network }}</h4></td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Комментарий:</b></td>
+    <td>{{ ipv4network.comment|linebreaksbr }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>IP-адреса:</b></td>
+    <td>{{ ipfrom }} - {{ ipto }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Шлюз по умолчанию:</b></td>
+    <td>{{ gw }}</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Первичный DNS:</b></td>
+    <td>188.65.128.26</td>
+  </tr>
+  <tr style="height: 30px;">
+    <td><b>Вторичный DNS:</b></td>
+    <td>188.65.130.130</td>
+  </tr>
+</table>
+
+{% endblock %}

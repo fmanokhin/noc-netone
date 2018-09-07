@@ -21,23 +21,42 @@
     background-color: #FF9900;
     border: none;
     height: 32px;
+    width: 72px;
+    font-family: 'Oswald', sans-serif;
+    float: right;
+  }
+  .filterbutton {
+    color: #fff;
+    background-color: #999999;
+    border: none;
+    height: 32px;
+    width: 72px;
     font-family: 'Oswald', sans-serif;
     float: right;
   }
 
 </style>
 {% if user.is_authenticated %}
-<input class="addbutton" type="button" value="ДОБАВИТЬ ТОЧКУ" onclick="location.href='{% url 'pop_new' %}'">
+<input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'pop_new' %}'">
 {% endif %}
 <table width='100%'>
-        {% for pop in pops %}
+<tr style="height: 30px;">
+  <td>
+    <form method="POST">{% csrf_token %}
+    {{ filter.form.as_p }}
+  </td>
+  <td></td>
+  <td>
+    <button class="filterbutton" type="submit">ФИЛЬТР</button>
+  </td>
+</tr>
 
-          <tr style="height: 30px;">
-            <td width="300px"><h4><a href="{% url 'pop_detail' pk=pop.pk %}">{{ pop.title }}</a></h1></td>
-            <td width="100px"><b>vlan:</b> {{ pop.vlans|linebreaksbr }}</td>
-            <td>{{ pop.address|linebreaksbr }}</td>
-          </tr>
-
-        {% endfor %}
+{% for pop in filter.qs %}
+<tr style="height: 30px;">
+  <td width="300px"><h4><a href="{% url 'pop_detail' pk=pop.pk %}">{{ pop.title }}</a></h1></td>
+  <td width="100px"><b>vlan:</b> {{ pop.vlans|linebreaksbr }}</td>
+  <td>{{ pop.address|linebreaksbr }}</td>
+</tr>
+{% endfor %}
 </table>
 {% endblock %}
