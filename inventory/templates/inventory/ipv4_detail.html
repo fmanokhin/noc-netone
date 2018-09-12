@@ -53,6 +53,28 @@ function delconfirm() {
     <td><h4>{{ ipv4network.network }}</h4></td>
   </tr>
   <tr style="height: 30px;">
+    <td><b>Статус:</b></td>
+    <td>{{ ipv4network.status|linebreaksbr }}</td>
+  </tr>
+  {% if ipv4network.tocore != None %}
+  <tr style="height: 30px;">
+    <td><b>Опорный узел:</b></td>
+    <td>{{ ipv4network.tocore|linebreaksbr }}</td>
+  </tr>
+  {% endif %}
+  {% if ipv4network.topop != None %}
+  <tr style="height: 30px;">
+    <td><b>Точка присутствия:</b></td>
+    <td>{{ ipv4network.topop|linebreaksbr }}</td>
+  </tr>
+  {% endif %}
+  {% if ipv4network.tocustomer != None %}
+  <tr style="height: 30px;">
+    <td><b>Клиент:</b></td>
+    <td>{{ ipv4network.tocustomer|linebreaksbr }}</td>
+  </tr>
+  {% endif %}
+  <tr style="height: 30px;">
     <td><b>Комментарий:</b></td>
     <td>{{ ipv4network.comment|linebreaksbr }}</td>
   </tr>

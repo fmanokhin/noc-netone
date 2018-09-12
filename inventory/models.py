@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 ipaddrvalid = RegexValidator(r"^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
-# Create your models here.
+#Create your models here.
 # Модель узла
 class Core(models.Model):
     title = models.CharField(max_length=100, blank=True)
@@ -93,9 +93,20 @@ class Device(models.Model):
     def __str__(self):
         return self.dnsname
 
+
 class Network(models.Model):
+    FREE = 'FREE'
+    BUSY = 'BUSY'
+    STATUS_CHOISES = (
+        (FREE, 'Свободно'),
+        (BUSY, 'Занято'),
+    )
     network = models.CharField(max_length=18, validators=[ipaddrvalid])
+    status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
     comment = models.CharField(max_length=100, blank=True)
+    tocore = models.ForeignKey(Core, on_delete=models.CASCADE, blank=True, null=True)
+    topop = models.ForeignKey(Pop, on_delete=models.CASCADE, blank=True, null=True)
+    tocustomer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
 
     def new_network(self):
         self.save()

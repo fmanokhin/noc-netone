@@ -36,42 +36,47 @@
   }
 </style>
 
-<script>
-function Go(val) {
-   var frm=document.seporform;
-   frm.code.value = val;
-   frm.submit();
-}
-</script>
-
 {% if user.is_authenticated %}
 <input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'ipv4_new' %}'">
 {% endif %}
 <table width='100%'>
+  <tr style="height: 30px;">
+    <td>
+      <form method="POST">{% csrf_token %}
+      {{ filter.form.as_p }}
+    </td>
+    <td></td>
+    <td></td>
+    <td>
+      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+    </td>
+  </tr>
 <tr style="height: 30px;">
-<!--
-  <td>
-    <form method="POST">{% csrf_token %}
-    {{ filter.form.as_p }}
-  </td>
-  <td>
-    <button class="filterbutton" type="submit">ФИЛЬТР</button>
-  </td>
--->
+<td><b>IP-сеть</b></td>
+<td><b>Статус</b></td>
+<td><b>Комментарий</b></td>
+<td><b>Подключение</b></td>
 </tr>
 
-{% for network in ipv4networks %}
+{% for network in filter.qs %}
 <tr style="height: 30px;">
-  <td width="100px"><a href="{% url 'ipv4_detail' pk=network.pk %}">{{ network.network }}</a></td>
+  <td width="120px"><a href="{% url 'ipv4_detail' pk=network.pk %}">{{ network.network }}</a></td>
+  <td>{{ network.status|linebreaksbr }}</td>
   <td>{{ network.comment|linebreaksbr }}</td>
+  {% if network.tocore != None %}
+  <td>{{ network.tocore|linebreaksbr}}</td>
+  {% elif network.topop != None %}
+  <td>{{ network.topop|linebreaksbr}}</td>
+  {% elif network.tocustomer != None %}
+  <td>{{ network.tocustomer|linebreaksbr}}</td>
+  {% endif %}
+  {% if network.status == "FREE" %}
+      {% if user.is_authenticated %}
   <td>
     <input class="filterbutton" type="button" value="РАЗДЕЛИТЬ" onclick="location.href='{% url 'ipv4_sepor' pk=network.pk %}'">
-    <!--
-    <form name="seporform" method="POST" action="{% url 'ipv4_sepor' pk=network.pk %}">{% csrf_token %}
-    <input  name='code'>
-    </form>
-    <a href="#" onclick="Go(100)" >РАЗДЕЛИТЬ</а>
-    -->
+  </td>
+      {% endif %}
+  {% endif %}
 </tr>
 {% endfor %}
 </table>

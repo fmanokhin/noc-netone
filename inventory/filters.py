@@ -1,5 +1,5 @@
 import django_filters
-from .models import Pop, Core, Customer, Device
+from .models import Pop, Core, Customer, Device, Network
 
 class PopFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr='icontains', label='')
@@ -24,3 +24,15 @@ class DeviceFilter(django_filters.FilterSet):
     class Meta:
         model = Device
         fields = ['dnsname',]
+
+class NetworkFilter(django_filters.FilterSet):
+    network = django_filters.CharFilter(lookup_expr='icontains', label='')
+    class Meta:
+        model = Network
+        fields = ['network', 'status',]
+
+class NetworkFilterNoStut(django_filters.FilterSet):
+    network = django_filters.CharFilter(lookup_expr='icontains', label='')
+    class Meta:
+        model = Network
+        fields = ['network',]

@@ -86,14 +86,14 @@ nav li {
 }
 
 #heading {
-	background: transparent url('static/img/h1-bg.png');
+	background: transparent url("{% static '/img/h1-bg.png' %}");
 	margin: 20px 0;
 }
 h1 {
 	display: inline-block;
 	color: #7e7e7e;
 	font: 40px/40px 'Oswald', sans-serif;
-	background: url('static/img/h1-bg.png');
+	background: transparent url("{% static '/img/h1-bg.png' %}");
 	margin: 0;
 	padding: 0 10px;
 }

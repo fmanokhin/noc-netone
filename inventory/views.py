@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from .models import Pop, Core, Customer, Device, Network
 from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm
-from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter
+from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
 import ipaddress, iptools
 
 # Create your views here.
@@ -17,9 +17,10 @@ def pop_list(request):
 def pop_detail(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     device = Pop.objects.get(pk=pk).device_set.all()
+    network = Pop.objects.get(pk=pk).network_set.all()
     upstream = Pop.objects.get(pk=pk).core_set.all()
     downstream = Pop.objects.get(pk=pk).customer_set.all()
-    context = {'pop': pop, 'device': device, 'upstream': upstream, 'downstream': downstream}
+    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream}
     return render(request, 'inventory/pop_detail.html', context)
 
 # Создать точку присутствия
@@ -64,8 +65,9 @@ def core_list(request):
 def core_detail(request, pk):
     core = get_object_or_404(Core, pk=pk)
     device = Core.objects.get(pk=pk).device_set.all()
+    network = Core.objects.get(pk=pk).network_set.all()
     downstream = Core.objects.get(pk=pk).pop_set.all()
-    context = {'core': core, 'device': device, 'downstream': downstream}
+    context = {'core': core, 'device': device, 'network': network, 'downstream': downstream}
     return render(request, 'inventory/core_detail.html', context)
 
 # Создать опорный узел
@@ -137,6 +139,52 @@ def core_downstreams_add(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('core_list')
+
+# На Корах (IPv4)
+def core_ipv4networks(request, pk):
+    core = get_object_or_404(Core, pk=pk)
+    ipv4networks = Network.objects.all()
+    ipv4networkfilter = NetworkFilterNoStut(request.POST, queryset=ipv4networks)
+    core_ipv4 = Core.objects.get(pk=pk).network_set.all()
+    context = {'core': core, 'ipv4networks': ipv4networks, 'core_ipv4': core_ipv4, 'filter': ipv4networkfilter}
+    return render(request, 'inventory/core_ipv4.html', context)
+
+def core_ipv4network_remove(request, corepk, networkpk):
+    Core.objects.get(pk=corepk).network_set.remove(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'FREE'
+    network.save(update_fields=['status'])
+    return redirect('core_list')
+
+def core_ipv4network_add(request, corepk, networkpk):
+    Core.objects.get(pk=corepk).network_set.add(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'BUSY'
+    network.save(update_fields=['status'])
+    return redirect('core_list')
+
+# На Точках присутствия (IPv4)
+def pop_ipv4networks(request, pk):
+    pop = get_object_or_404(Pop, pk=pk)
+    ipv4networks = Network.objects.all()
+    ipv4networkfilter = NetworkFilterNoStut(request.POST, queryset=ipv4networks)
+    pop_ipv4 = Pop.objects.get(pk=pk).network_set.all()
+    context = {'pop': pop, 'ipv4networks': ipv4networks, 'pop_ipv4': pop_ipv4, 'filter': ipv4networkfilter}
+    return render(request, 'inventory/pop_ipv4.html', context)
+
+def pop_ipv4network_remove(request, poppk, networkpk):
+    Pop.objects.get(pk=poppk).network_set.remove(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'FREE'
+    network.save(update_fields=['status'])
+    return redirect('pop_list')
+
+def pop_ipv4network_add(request, poppk, networkpk):
+    Pop.objects.get(pk=poppk).network_set.add(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'BUSY'
+    network.save(update_fields=['status'])
+    return redirect('pop_list')
 
 # На Точках присутствия (оборудование)
 def pop_devices(request, pk):
@@ -215,6 +263,29 @@ def customer_upstreams_add(request, customerpk, poppk):
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
     return redirect('customer_list')
 
+# На Клиентах (IPv4)
+def customer_ipv4networks(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    ipv4networks = Network.objects.all()
+    ipv4networkfilter = NetworkFilterNoStut(request.POST, queryset=ipv4networks)
+    customer_ipv4 = Customer.objects.get(pk=pk).network_set.all()
+    context = {'customer': customer, 'ipv4networks': ipv4networks, 'customer_ipv4': customer_ipv4, 'filter': ipv4networkfilter}
+    return render(request, 'inventory/customer_ipv4.html', context)
+
+def customer_ipv4network_remove(request, customerpk, networkpk):
+    Customer.objects.get(pk=customerpk).network_set.remove(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'FREE'
+    network.save(update_fields=['status'])
+    return redirect('customer_list')
+
+def customer_ipv4network_add(request, customerpk, networkpk):
+    Customer.objects.get(pk=customerpk).network_set.add(Network.objects.get(pk=networkpk))
+    network = Network.objects.get(pk=networkpk)
+    network.status = 'BUSY'
+    network.save(update_fields=['status'])
+    return redirect('customer_list')
+
 # Клиенты
 # Отобразить всех клиентов
 def customer_list(request):
@@ -227,7 +298,8 @@ def customer_list(request):
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     upstream = Customer.objects.get(pk=pk).pop_set.all()
-    context = {'customer': customer, 'upstream': upstream}
+    network = Customer.objects.get(pk=pk).network_set.all()
+    context = {'customer': customer, 'upstream': upstream, 'network': network}
     return render(request, 'inventory/customer_detail.html', context)
 
 # Создать клиента
@@ -320,7 +392,8 @@ def device_remove(request, pk):
 #IPv4
 def ipv4_list(request):
     ipv4networks = Network.objects.all()
-    context = {'ipv4networks': ipv4networks}
+    ipv4networkfilter = NetworkFilter(request.POST, queryset=ipv4networks)
+    context = {'ipv4networks': ipv4networks, 'filter': ipv4networkfilter}
     return render(request, 'inventory/ipv4_list.html', context)
 
 def ipv4_detail(request, pk):
@@ -363,7 +436,6 @@ def ipv4_sepor(request, pk):
     ipv4network.delete()
     ipv4networks = Network.objects.all()
     return redirect('ipv4_list')
-
 
 #Удалить подсеть
 def ipv4_remove(request, pk):

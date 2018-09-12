@@ -25,6 +25,14 @@ urlpatterns = [
     url(r'^internet/core/(?P<pk>\d+)/edit/downstreams/$', views.core_downstreams, name='core_downstreams'),
     url(r'^internet/core/(?P<corepk>\d+)/downstreams/remove/(?P<poppk>\d+)/$', views.core_downstreams_remove, name='core_downstreams_remove'),
     url(r'^internet/core/(?P<corepk>\d+)/downstreams/add/(?P<poppk>\d+)/$', views.core_downstreams_add, name='core_downstreams_add'),
+# На Корах (IPv4)
+    url(r'^internet/core/(?P<pk>\d+)/edit/ipv4networks/$', views.core_ipv4networks, name='core_ipv4networks'),
+    url(r'^internet/core/(?P<corepk>\d+)/ipv4network/remove/(?P<networkpk>\d+)/$', views.core_ipv4network_remove, name='core_ipv4network_remove'),
+    url(r'^internet/core/(?P<corepk>\d+)/ipv4network/add/(?P<networkpk>\d+)/$', views.core_ipv4network_add, name='core_ipv4network_add'),
+# На Точках присутствия (IPv4)
+    url(r'^internet/pop/(?P<pk>\d+)/edit/ipv4networks/$', views.pop_ipv4networks, name='pop_ipv4networks'),
+    url(r'^internet/pop/(?P<poppk>\d+)/ipv4network/remove/(?P<networkpk>\d+)/$', views.pop_ipv4network_remove, name='pop_ipv4network_remove'),
+    url(r'^internet/pop/(?P<poppk>\d+)/ipv4network/add/(?P<networkpk>\d+)/$', views.pop_ipv4network_add, name='pop_ipv4network_add'),
 # На Точках присутствия (оборудование)
     url(r'^internet/pop/(?P<pk>\d+)/edit/devices/$', views.pop_devices, name='pop_devices'),
     url(r'^internet/pop/(?P<poppk>\d+)/devices/remove/(?P<devicepk>\d+)/$', views.pop_device_remove, name='pop_device_remove'),
@@ -41,6 +49,10 @@ urlpatterns = [
     url(r'^internet/customer/(?P<pk>\d+)/edit/upstreams/$', views.customer_upstreams, name='customer_upstreams'),
     url(r'^internet/customer/(?P<customerpk>\d+)/upstreams/remove/(?P<poppk>\d+)/$', views.customer_upstreams_remove, name='customer_upstreams_remove'),
     url(r'^internet/customer/(?P<customerpk>\d+)/upstreams/add/(?P<poppk>\d+)/$', views.customer_upstreams_add, name='customer_upstreams_add'),
+# На Клиентах (IPv4)
+    url(r'^internet/customer/(?P<pk>\d+)/edit/ipv4networks/$', views.customer_ipv4networks, name='customer_ipv4networks'),
+    url(r'^internet/customer/(?P<customerpk>\d+)/ipv4network/remove/(?P<networkpk>\d+)/$', views.customer_ipv4network_remove, name='customer_ipv4network_remove'),
+    url(r'^internet/customer/(?P<customerpk>\d+)/ipv4network/add/(?P<networkpk>\d+)/$', views.customer_ipv4network_add, name='customer_ipv4network_add'),
 
 # Клиенты:
     url(r'^internet/customers/$', views.customer_list, name='customer_list'),
@@ -64,7 +76,6 @@ urlpatterns = [
     url(r'^ipam/ipv4/(?P<pk>\d+)/edit/$', views.ipv4_edit, name='ipv4_edit'),
     url(r'^ipam/ipv4/(?P<pk>\d+)/remove/$', views.ipv4_remove, name='ipv4_remove'),
     url(r'^ipam/ipv4/(?P<pk>\d+)/sepor/$', views.ipv4_sepor, name='ipv4_sepor'),
-
 
 #Фильтры:
     url(r'^internet/filter/$', views.popfilter, name='popfilter'),
