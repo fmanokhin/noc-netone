@@ -1,65 +1,139 @@
 {% load staticfiles %}
+
 <!doctype html>
 <html>
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>NET:1 Inventory</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/topbar.css' %}" type="text/css">
+    <!--
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,300" type="text/css">
+    -->
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
 <body>
-      <div id="wrapper">
-		      <header>
-            <a href="/"><img src="{% static 'img/oglogo.png' %}" alt="logo"></a>
-            <h1><a href="tel:+7456462888">+7 (495) 646-28-88</a><h1>
-        </form>
-          </header>
-        <nav>
-    	       <ul class="top-menu">
-    		         <a href="/internet/cores/"><li>ИНТЕРНЕТ</li></a>
-    		         <a href="/telephony/"><li>ТЕЛЕФОНИЯ</li></a>
-    		         <a href="/l2vpn/"><li>КАНАЛЫ СВЯЗИ</li></a>
-                 <a href="/inventory/pd/"><li>УЧЕТ ОбОРУДОВАНИЯ</li></a>
-                 <a href="/ipam/ipv4/"><li>УЧЕТ РЕСУРСОВ IPv4/IPv6</li></a>
-    	       </ul>
-        </nav>
-		  <div id="heading">
-        <h1>Интернет</h1>  
+  <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/universal/2-0-1/vendor/font-awesome/css/font-awesome.min.css">
+<div class="top-bar">
+  <div class="container-fluid">
+    <div class="row d-flex align-items-center">
+      <div class="col-md-6">
+          <img src="{% static 'img/oglogo.png' %}">
       </div>
-		  <aside>
-        <nav>
-        	<ul class="aside-menu">
-        		<a href="/internet/cores/"><li>Опорные узлы</li></a>
-        <!--<a href="/internet/vpls/"><li>VPLS-ы</li></a>-->
-        		<a href="/internet/pops/"><li>Точки присутствия</li></a>
-        		<a href="/internet/customers/"><li>Клиенты</li></a>
-            <a href="/internet/blocked/"><li>Блокировки</li></a>
-        	</ul>
+      <div class="col-md-6" style="text-align: right">
+          <div class="login"><a href="#" class="signup-btn"><i class="fa fa-user"></i><span class="d-none d-md-inline-block">{{ user.username }}</span></a><a href="{% url 'logout' %}" data-toggle="modal" data-target="#login-modal" class="login-btn"><i class="fa fa-sign-in"></i><span class="d-none d-md-inline-block">Выход</span></a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+            <a href="#" class="navbar-brand">ИНТЕРНЕТ</a>
+            <button class="navbar-toggler" type="button" data-target="#navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a href="/internet/cores/" class="nav-link">Интернет</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Телефония</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Каналы связи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/inventory/pd/" class="nav-link">Учет оборудования</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/ipam/ipv4/" class="nav-link">Учет ресурсов IPv4/IPv6</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
-      </aside>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2" style="padding: 0px; background-color: #333; border-top: 1px solid #FD5025">
+
+      <nav>
+          <!--Note: declare the Menu style in the data-menu-style="horizontal" (options: horizontal, vertical, accordion) -->
+          <ul id="respMenu" class="ace-responsive-menu" data-menu-style="vertical">
+              <li>
+                  <a href="/internet/cores/">
+                      <i class="fa fa-globe" aria-hidden="true"></i>
+                      <span class="title">Опорные узлы</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="/internet/pops/">
+                      <i class="fa fa-home" aria-hidden="true"></i>
+                      <span class="title">Точки присутствия</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="/internet/customers/">
+                      <i class="fa fa-users" aria-hidden="true"></i>
+                      <span class="title">Клиенты</span>
+                  </a>
+              </li>
+              <li>
+                  <a class="" href="#">
+                      <i class="fa fa-lock" aria-hidden="true"></i>
+                      <span class="title">Блокировки</span>
+                  </a>
+              </li>
+          </ul>
+      </nav>
+
+    </div>
+    <div class="col-md-10">
 		  <section>
         {% block content %}
         {% endblock %}
       </section>
-	    </div>
-      <footer>
-            <div id="footer">
-              <div id="sitemap">
-                <h3>КОНТАКТЫ</h3>
-	              <div>
-		            <a href="mailto:noc@netone.ru">NOC</a>
-		            <a href="mailto:support@netone.ru">Служба поддержки</a>
-	              </div>
-              </div>
-		        <div id="copyright">
-              <a href="tel:+74956462888" style="text-decoration: none">+7(495)646-28-88</a>
-              <p>115035, Москва, Садовническая набережная, д. 69</p>
-	          </div>
-          </div>
-      </footer>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+      <h5>Служба поддержки</h5>
+      <p><strong>Email:</strong> support@netone.ru
+      <br><strong>Tel.:</strong> +7 (495) 646 2800
+      </div>
+      <div class="col-md-2 list">
+        <ul>
+          <li><a href="/internet/cores/">Интернет</a></li>
+          <li><a href="/telephony/">Телефония</a></li>
+          <li><a href="#">Каналы связи</a></li>
+          <li><a href="/inventory/pd/">Учет оборудования</a></li>
+          <li><a href="/ipam/ipv4/">Учет ресурсов IPv4/IPv6</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2 list">
+        <ul>
+          <li><a href="/internet/cores/">Опорные узлы</a></li>
+          <li><a href="/internet/pops/">Точки присутствия</a></li>
+          <li><a href="/internet/customers/">Клиенты</a></li>
+          <li><a href="#">Блокировки</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+      </div>
+      <div class="col-md">
+        <h5>Контакты</h5>
+        <strong>Адрес:</strong> 115035, Москва, Садовническая набережная, д. 69
+        <br><strong>Email:</strong> noc@netone.ru
+        <br><strong>Tel.:</strong> +7 (495) 646 2888
+      </div>
+    </div>
+</footer>
 </body>
 </html>

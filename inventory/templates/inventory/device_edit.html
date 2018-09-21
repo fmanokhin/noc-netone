@@ -1,29 +1,42 @@
 {% extends 'inventory/base_inventory.html' %}
 {% block content %}
 {% if user.is_authenticated %}
-<style type="text/css">
-.editform input[type="text"] {
-    width: 40%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-.editform label {
-    display: inline-block;
-    width: 90px;
-    padding-top: 15px;
-}
-</style>
-<h3>Добавить устройство:</h3>
-   <span class="editform">
-   <form method="POST">{% csrf_token %}
-       {{ form.as_p }}
-       <button type="submit">СОХРАНИТЬ</button>
-       <button type="cancel" onclick="window.history.back()">ОТМЕНА</button>
-   </form>
-   </span>
+
+<form method="POST">{% csrf_token %}
+<table class="table table-sm table-borderless table-hover" width='100%' style="margin-top: 10px">
+  <thead>
+    <th>Коммутатор:</th>
+  </thead>
+  <tr>
+    <td width="15%">Производитель:</td>
+    <td>{{ form.vendor }}</td>
+  </tr>
+  <tr>
+    <td>Модель:</td>
+    <td>{{ form.model }}</td>
+  </tr>
+  <tr>
+    <td>Имя:</td>
+    <td>{{ form.dnsname }}</td>
+  </tr>
+  <tr>
+    <td>IP-адрес:</td>
+    <td>{{ form.ipaddress }}</td>
+  </tr>
+  <tr>
+    <td>Адрес:</td>
+    <td>{{ form.geoaddress }}</td>
+  </tr>
+</table>
+<table style="margin-button: 10px">
+  <tr>
+    <td>
+      <button class="btn btn-dark btn-sm" style="height: 32px; width: 100px; margin-top: 10px" type="submit">СОХРАНИТЬ</button>
+      <button class="btn btn-dark btn-sm" style="height: 32px; width: 100px; margin-top: 10px" type="cancel" onclick="window.history.back()">ОТМЕНА</button>
+     </td>
+  </tr>
+  </table>
+</form>
+<p>
 {% endif %}
 {% endblock %}

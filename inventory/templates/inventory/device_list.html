@@ -1,45 +1,25 @@
 {% extends 'inventory/base_inventory.html' %}
 {% block content %}
-<style type="text/css">
-  h4 a:visited {
-    color: #444444;
-  }
-  h4 a:hover {
-    text-decoration: underline;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .filterbutton {
-    color: #fff;
-    background-color: #999999;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
 
-</style>
-{% if user.is_authenticated %}
-<input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'device_new' %}'">
-{% endif %}
-<table width='100%'>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+    <tr>
+      <th>Производитель</th>
+      <th>Модель</th>
+      <th>Имя</th>
+      <th>IP-адрес</th>
+      <th>Адрес</th>
+      <th>
+        {% if user.is_authenticated %}
+          {% for group in  request.user.groups.all %}
+            {%  if 'noc' == group.name %}
+              <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'device_new' %}'">
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
   <tr style="height: 30px;">
     <td>
       <form method="POST">{% csrf_token %}
@@ -49,16 +29,10 @@
     <td></td>
     <td></td>
     <td>
-      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+      <button class="btn btn-light btn-sm" style="height: 32px; width: 92px;" type="submit">ФИЛЬТР</button>
     </td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Производитель</td>
-    <td><b>Модель</td>
-    <td><h4>Имя</a></h1></td>
-    <td><b>ip-адрес</b></td>
-    <td><b>Адрес</b></td>
-  </tr>
+
 {% for device in filter.qs %}
   <tr style="height: 30px;">
     <td>{{ device.vendor|linebreaksbr }}</td>

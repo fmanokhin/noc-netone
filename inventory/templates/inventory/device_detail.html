@@ -1,37 +1,9 @@
 {% extends 'inventory/base_inventory.html' %}
 {% block content %}
-<style type="text/css">
-  h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .delbutton {
-    color: #fff;
-    background-color: #FF0000;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-</style>
 
 {% if user.is_authenticated %}
+  {% for group in  request.user.groups.all %}
+    {%  if 'noc' == group.name %}
 <script>
 function delconfirm() {
   var user_choice = window.confirm('Вы уверены?');
@@ -42,32 +14,42 @@ function delconfirm() {
   }
 }
 </script>
-
-<input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'device_edit' pk=device.pk %}'">
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
-<table width='100%'>
-  <tr style="height: 30px;">
-    <th width="15%"><h4>Производитель:</h4></td>
-    <td><h4>{{ device.vendor }}</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Производитель:</th>
+    <th>{{ device.vendor }}</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+          <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'device_edit' pk=device.pk %}'">
+          <input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px; margin-right: 10px;" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Модель:</b></td>
+</thead>
+  <tr>
+    <td>Модель:</td>
     <td>{{ device.model|linebreaksbr }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Имя:</b></td>
+  <tr>
+    <td>Имя:</td>
     <td>{{ device.dnsname|linebreaksbr }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>IP-адрес:</b></td>
+  <tr>
+    <td>IP-адрес:</td>
     <td>{{ device.ipaddress|linebreaksbr }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Адрес:</b></td>
+  <tr>
+    <td>Адрес:</td>
     <td>{{ device.geoaddress|linebreaksbr }}</td>
   </tr>
 </table>
-
 {% endblock %}

@@ -8,7 +8,10 @@ class Core(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100)
+    contacts = models.CharField(max_length=100, blank=True, null=True)
+    manager = models.CharField(max_length=100, blank=True, null=True)
+    bandwidth = models.CharField(max_length=100, blank=True, null=True)
+    vlans = models.CharField(max_length=100, blank=True, null=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -101,8 +104,19 @@ class Network(models.Model):
         (FREE, 'Свободно'),
         (BUSY, 'Занято'),
     )
+    MPLS = 'MPLS'
+    TECH = 'TECH'
+    CORE = 'CORE'
+    CUSTOMER = 'Customers'
+    SEGMENT_CHOISES = (
+        (TECH, 'TECH'),
+        (MPLS, 'MPLS'),
+        (CORE, 'CORE'),
+        (CUSTOMER, 'CUSTOMERS'),
+    )
     network = models.CharField(max_length=18, validators=[ipaddrvalid])
     status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
+    segment = models.CharField(max_length=9, choices=SEGMENT_CHOISES, null=True)
     comment = models.CharField(max_length=100, blank=True)
     tocore = models.ForeignKey(Core, on_delete=models.CASCADE, blank=True, null=True)
     topop = models.ForeignKey(Pop, on_delete=models.CASCADE, blank=True, null=True)

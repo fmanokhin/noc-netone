@@ -29,7 +29,7 @@ class NetworkFilter(django_filters.FilterSet):
     network = django_filters.CharFilter(lookup_expr='icontains', label='')
     class Meta:
         model = Network
-        fields = ['network', 'status',]
+        fields = ['network', 'status', 'segment']
 
 class NetworkFilterNoStut(django_filters.FilterSet):
     network = django_filters.CharFilter(lookup_expr='icontains', label='')

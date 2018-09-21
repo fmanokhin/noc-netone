@@ -1,76 +1,36 @@
 {% extends 'inventory/base_inet.html' %}
 {% block content %}
-<style type="text/css">
-  h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .delbutton {
-    color: #fff;
-    background-color: #FF0000;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .filterbutton {
-    color: #fff;
-    background-color: #999999;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
 
-</style>
-
-<table  width='100%'>
-  <tr style="height: 30px;">
-    <td ><h4><p>Существующие:</h4></td>
-    <td ><h4><p>{{ core.title }}</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Существующие:</th>
+    <th><a href="{% url 'core_detail' pk=core.pk %}">{{ core.title }}</a></th>
   </tr>
+  </thead>
   {% for i in core_ipv4 %}
-  <tr style="height: 30px;">
-    <td width='15%'><b>Сеть:</b></td>
+  <tr>
+    <td width="15%">Сеть:</td>
     <td><a href="{% url 'ipv4_detail' pk=i.pk %}">{{ i }}</a></td>
-    <td><input class="delbutton" type="button" value="ОТКЛ." onclick="location.href='{% url 'core_ipv4network_remove' corepk=core.pk networkpk=i.pk %}'"></td>
+    <td><input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ОТКЛ." onclick="location.href='{% url 'core_ipv4network_remove' corepk=core.pk networkpk=i.pk %}'"></td>
   </tr>
   {% endfor %}
-  <tr style="height: 30px;">
-    <td><h4><p>Добавить:</h4></td>
+  <tr>
+    <td><strong>Добавить</strong></td>
     <td>
       <form method="POST">{% csrf_token %}
       {{ filter.form.as_p }}
     </td>
     <td>
-      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+      <button class="btn btn-light btn-sm" style="float: right; height: 32px; width: 92px;" type="submit">ФИЛЬТР</button>
     </td>
   </tr>
   {% for network in filter.qs %}
   {% if network.status == "FREE" %}
-  <tr style="height: 30px;">
-    <td width='15%'><b>Сеть:</b></td>
+  <tr>
+    <td>Сеть:</td>
     <td><a href="{% url 'ipv4_detail' pk=network.pk %}">{{ network.network }}</a></td>
-    <td><input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'core_ipv4network_add' corepk=core.pk networkpk=network.pk %}'"></td>
+    <td><input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'core_ipv4network_add' corepk=core.pk networkpk=network.pk %}'"></td>
   </tr>
   {% endif %}
   {% endfor %}

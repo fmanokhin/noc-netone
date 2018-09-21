@@ -1,60 +1,39 @@
 {% extends 'inventory/base_inet.html' %}
 {% block content %}
-<style type="text/css">
-  h4 a:visited {
-    color: #444444;
-  }
-  h4 a:hover {
-    text-decoration: underline;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .filterbutton {
-    color: #fff;
-    background-color: #999999;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
 
-</style>
-{% if user.is_authenticated %}
-<input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'customer_new' %}'">
-{% endif %}
-<table width='100%'>
-<tr style="height: 30px;">
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+    <tr>
+      <th>Опорный узел</th>
+      <th>Адрес</th>
+      <th>Подключение</th>
+      <th>
+        {% if user.is_authenticated %}
+          {% for group in  request.user.groups.all %}
+            {%  if 'noc' == group.name %}
+        <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'customer_new' %}'">
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
+<tr>
   <td>
     <form method="POST">{% csrf_token %}
     {{ filter.form.as_p }}
   </td>
-  <td></td>
   <td>
-    <button class="filterbutton" type="submit">ФИЛЬТР</button>
+    <button class="btn btn-light btn-sm" style="height: 32px; width: 92px;" type="submit">ФИЛЬТР</button>
   </td>
+  <td></td>
 </tr>
 
 {% for customer in filter.qs %}
-<tr style="height: 30px;">
-  <td width="300px"><h4><a href="{% url 'customer_detail' pk=customer.pk %}">{{ customer.title }}</a></h1></td>
+<tr>
+  <td width="300px"><a href="{% url 'customer_detail' pk=customer.pk %}">{{ customer.title }}</a></td>
   <td>{{ customer.address|linebreaksbr }}</td>
+  <td>{{ customer.switch|linebreaksbr }} <b>vlan:</b>{{ customer.vlans|linebreaksbr }}</td>
 </tr>
 {% endfor %}
 </table>

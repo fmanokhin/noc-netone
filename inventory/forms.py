@@ -12,7 +12,7 @@ class CoreForm(forms.ModelForm):
 
     class Meta:
         model = Core
-        fields = ('title','address', 'contacts',)
+        fields = ('title','address', 'contacts','manager', 'bandwidth', 'vlans',)
 
 class CustomerForm(forms.ModelForm):
 
@@ -36,4 +36,4 @@ class NetworkForm(forms.ModelForm):
 
     class Meta:
         model = Network
-        fields = ('network', 'status', 'comment',)
+        fields = ('network', 'status', 'segment', 'comment',)

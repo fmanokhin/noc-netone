@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
+from django.contrib.auth.decorators import login_required
 from .models import Pop, Core, Customer, Device, Network
 from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm
 from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
@@ -7,6 +8,7 @@ import ipaddress, iptools
 
 # Create your views here.
 # Отобразить точки присутствия
+@login_required
 def pop_list(request):
     pops = Pop.objects.all()
     popfilter = PopFilter(request.POST, queryset=pops)
@@ -14,6 +16,7 @@ def pop_list(request):
     return render(request, 'inventory/pop_list.html', context)
 
 # Отображение данных по точке присутствия
+@login_required
 def pop_detail(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     device = Pop.objects.get(pk=pk).device_set.all()
@@ -24,6 +27,7 @@ def pop_detail(request, pk):
     return render(request, 'inventory/pop_detail.html', context)
 
 # Создать точку присутствия
+@login_required
 def pop_new(request):
     if request.method == "POST":
         form = PopForm(request.POST)
@@ -36,6 +40,7 @@ def pop_new(request):
     return render(request, 'inventory/pop_edit.html', {'form': form})
 
 # Редактировать точку присутствия
+@login_required
 def pop_edit(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     if request.method == "POST":
@@ -49,12 +54,14 @@ def pop_edit(request, pk):
     return render(request, 'inventory/pop_edit.html', {'form': form})
 
 #Удалить точку присутствия
+@login_required
 def pop_remove(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     pop.delete()
     return redirect('pop_list')
 
 # Отобразить опорные узлы
+@login_required
 def core_list(request):
     cores = Core.objects.all()
     corefilter = CoreFilter(request.POST, queryset=cores)
@@ -62,6 +69,7 @@ def core_list(request):
     return render(request, 'inventory/core_list.html', context)
 
 # Отображение данных по опорному узлу
+@login_required
 def core_detail(request, pk):
     core = get_object_or_404(Core, pk=pk)
     device = Core.objects.get(pk=pk).device_set.all()
@@ -71,6 +79,7 @@ def core_detail(request, pk):
     return render(request, 'inventory/core_detail.html', context)
 
 # Создать опорный узел
+@login_required
 def core_new(request):
     if request.method == "POST":
         form = CoreForm(request.POST)
@@ -83,6 +92,7 @@ def core_new(request):
     return render(request, 'inventory/core_edit.html', {'form': form})
 
 # Редактировать опорный узел
+@login_required
 def core_edit(request, pk):
     core = get_object_or_404(Core, pk=pk)
     if request.method == "POST":
@@ -96,6 +106,7 @@ def core_edit(request, pk):
     return render(request, 'inventory/core_edit.html', {'form': form})
 
 #Удалить опорный узел присутствия
+@login_required
 def core_remove(request, pk):
     core = get_object_or_404(Core, pk=pk)
     core.delete()
@@ -103,6 +114,7 @@ def core_remove(request, pk):
 
 # Связки
 # На Корах (оборудование)
+@login_required
 def core_devices(request, pk):
     core = get_object_or_404(Core, pk=pk)
     devices = Device.objects.all()
@@ -111,17 +123,20 @@ def core_devices(request, pk):
     context = {'core': core, 'device': device, 'devices': devices, 'filter': devicesfilter}
     return render(request, 'inventory/core_devices.html', context)
 
+@login_required
 def core_device_remove(request, corepk, devicepk):
     Device.objects.get(pk=devicepk).core_set.remove(Core.objects.get(pk=corepk))
     Core.objects.get(pk=corepk).device_set.remove(Device.objects.get(pk=devicepk))
     return redirect('core_detail', corepk)
 
+@login_required
 def core_device_add(request, corepk, devicepk):
     Device.objects.get(pk=devicepk).core_set.add(Core.objects.get(pk=corepk))
     Core.objects.get(pk=corepk).device_set.add(Device.objects.get(pk=devicepk))
     return redirect('core_detail', corepk)
 
 # На Корах (даунстримы)
+@login_required
 def core_downstreams(request, pk):
     core = get_object_or_404(Core, pk=pk)
     pops = Pop.objects.all()
@@ -130,17 +145,20 @@ def core_downstreams(request, pk):
     context = {'core': core, 'downstream': downstream, 'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/core_downstreams.html', context)
 
+@login_required
 def core_downstreams_remove(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.remove(Core.objects.get(pk=corepk))
     return redirect('core_list')
 
+@login_required
 def core_downstreams_add(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('core_list')
 
 # На Корах (IPv4)
+@login_required
 def core_ipv4networks(request, pk):
     core = get_object_or_404(Core, pk=pk)
     ipv4networks = Network.objects.all()
@@ -149,6 +167,7 @@ def core_ipv4networks(request, pk):
     context = {'core': core, 'ipv4networks': ipv4networks, 'core_ipv4': core_ipv4, 'filter': ipv4networkfilter}
     return render(request, 'inventory/core_ipv4.html', context)
 
+@login_required
 def core_ipv4network_remove(request, corepk, networkpk):
     Core.objects.get(pk=corepk).network_set.remove(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -156,6 +175,7 @@ def core_ipv4network_remove(request, corepk, networkpk):
     network.save(update_fields=['status'])
     return redirect('core_list')
 
+@login_required
 def core_ipv4network_add(request, corepk, networkpk):
     Core.objects.get(pk=corepk).network_set.add(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -164,6 +184,7 @@ def core_ipv4network_add(request, corepk, networkpk):
     return redirect('core_list')
 
 # На Точках присутствия (IPv4)
+@login_required
 def pop_ipv4networks(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     ipv4networks = Network.objects.all()
@@ -172,6 +193,7 @@ def pop_ipv4networks(request, pk):
     context = {'pop': pop, 'ipv4networks': ipv4networks, 'pop_ipv4': pop_ipv4, 'filter': ipv4networkfilter}
     return render(request, 'inventory/pop_ipv4.html', context)
 
+@login_required
 def pop_ipv4network_remove(request, poppk, networkpk):
     Pop.objects.get(pk=poppk).network_set.remove(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -179,6 +201,7 @@ def pop_ipv4network_remove(request, poppk, networkpk):
     network.save(update_fields=['status'])
     return redirect('pop_list')
 
+@login_required
 def pop_ipv4network_add(request, poppk, networkpk):
     Pop.objects.get(pk=poppk).network_set.add(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -187,6 +210,7 @@ def pop_ipv4network_add(request, poppk, networkpk):
     return redirect('pop_list')
 
 # На Точках присутствия (оборудование)
+@login_required
 def pop_devices(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     devices = Device.objects.all()
@@ -195,11 +219,13 @@ def pop_devices(request, pk):
     context = {'pop': pop, 'device': device, 'devices': devices, 'filter': devicesfilter}
     return render(request, 'inventory/pop_devices.html', context)
 
+@login_required
 def pop_device_remove(request, poppk, devicepk):
     Device.objects.get(pk=devicepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).device_set.remove(Device.objects.get(pk=devicepk))
     return redirect('pop_detail', poppk)
 
+@login_required
 def pop_device_add(request, poppk, devicepk):
     Device.objects.get(pk=devicepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).device_set.add(Device.objects.get(pk=devicepk))
@@ -207,6 +233,7 @@ def pop_device_add(request, poppk, devicepk):
 
 
 # На Точках присутствия (апстримы)
+@login_required
 def pop_upstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     cores = Core.objects.all()
@@ -215,17 +242,20 @@ def pop_upstreams(request, pk):
     context = {'pop': pop, 'upstream': upstream, 'cores': cores, 'filter': corefilter}
     return render(request, 'inventory/pop_upstreams.html', context)
 
+@login_required
 def pop_upstreams_remove(request, poppk, corepk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.remove(Core.objects.get(pk=corepk))
     return redirect('pop_list')
 
+@login_required
 def pop_upstreams_add(request, poppk, corepk):
     Core.objects.get(pk=corepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('pop_list')
 
 # На Точках присутствия (даунстримы)
+@login_required
 def pop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     customers = Customer.objects.all()
@@ -234,17 +264,20 @@ def pop_downstreams(request, pk):
     context = {'pop': pop, 'downstream': downstream, 'customers': customers, 'filter': customerfilter}
     return render(request, 'inventory/pop_downstreams.html', context)
 
+@login_required
 def pop_downstreams_remove(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.remove(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.remove(Pop.objects.get(pk=poppk))
     return redirect('pop_list')
 
+@login_required
 def pop_downstreams_add(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.add(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
     return redirect('pop_list')
 
 # На Клиентах (апстримы)
+@login_required
 def customer_upstreams(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     pops = Pop.objects.all()
@@ -253,17 +286,20 @@ def customer_upstreams(request, pk):
     context = {'customer': customer, 'upstream': upstream, 'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/customer_upstreams.html', context)
 
+@login_required
 def customer_upstreams_remove(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.remove(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.remove(Pop.objects.get(pk=poppk))
     return redirect('customer_list')
 
+@login_required
 def customer_upstreams_add(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.add(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
     return redirect('customer_list')
 
 # На Клиентах (IPv4)
+@login_required
 def customer_ipv4networks(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     ipv4networks = Network.objects.all()
@@ -272,6 +308,7 @@ def customer_ipv4networks(request, pk):
     context = {'customer': customer, 'ipv4networks': ipv4networks, 'customer_ipv4': customer_ipv4, 'filter': ipv4networkfilter}
     return render(request, 'inventory/customer_ipv4.html', context)
 
+@login_required
 def customer_ipv4network_remove(request, customerpk, networkpk):
     Customer.objects.get(pk=customerpk).network_set.remove(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -279,6 +316,7 @@ def customer_ipv4network_remove(request, customerpk, networkpk):
     network.save(update_fields=['status'])
     return redirect('customer_list')
 
+@login_required
 def customer_ipv4network_add(request, customerpk, networkpk):
     Customer.objects.get(pk=customerpk).network_set.add(Network.objects.get(pk=networkpk))
     network = Network.objects.get(pk=networkpk)
@@ -288,6 +326,7 @@ def customer_ipv4network_add(request, customerpk, networkpk):
 
 # Клиенты
 # Отобразить всех клиентов
+@login_required
 def customer_list(request):
     customers = Customer.objects.all()
     customerfilter = CustomerFilter(request.POST, queryset=customers)
@@ -295,6 +334,7 @@ def customer_list(request):
     return render(request, 'inventory/customer_list.html', context)
 
 # Отображение данных по клиенту
+@login_required
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     upstream = Customer.objects.get(pk=pk).pop_set.all()
@@ -303,6 +343,7 @@ def customer_detail(request, pk):
     return render(request, 'inventory/customer_detail.html', context)
 
 # Создать клиента
+@login_required
 def customer_new(request):
     if request.method == "POST":
         form = CustomerForm(request.POST)
@@ -315,6 +356,7 @@ def customer_new(request):
     return render(request, 'inventory/customer_edit.html', {'form': form})
 
 # Редактировать клиента
+@login_required
 def customer_edit(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     if request.method == "POST":
@@ -328,12 +370,14 @@ def customer_edit(request, pk):
     return render(request, 'inventory/customer_edit.html', {'form': form})
 
 #Удалить клиента
+@login_required
 def customer_remove(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     customer.delete()
     return redirect('customer_list')
 
 #Редактировать детали подключения клиента
+@login_required
 def customer_connection(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     if request.method == "POST":
@@ -348,17 +392,20 @@ def customer_connection(request, pk):
 
 # Оборудование
 # Список всего оборудования
+@login_required
 def device_list(request):
     devices = Device.objects.all()
     devicesfilter = DeviceFilter(request.POST, queryset=devices)
     context = {'devices': devices, 'filter': devicesfilter}
     return render(request, 'inventory/device_list.html', context)
 
+@login_required
 def device_detail(request, pk):
     device = get_object_or_404(Device, pk=pk)
     context = {'device': device}
     return render(request, 'inventory/device_detail.html', context)
 
+@login_required
 def device_new(request):
     if request.method == "POST":
         form = DeviceForm(request.POST)
@@ -371,6 +418,7 @@ def device_new(request):
     return render(request, 'inventory/device_edit.html', {'form': form})
 
 # Редактировать устройство
+@login_required
 def device_edit(request, pk):
     device = get_object_or_404(Device, pk=pk)
     if request.method == "POST":
@@ -384,18 +432,21 @@ def device_edit(request, pk):
     return render(request, 'inventory/device_edit.html', {'form': form})
 
 # Удалить устройство
+@login_required
 def device_remove(request, pk):
     device = get_object_or_404(Device, pk=pk)
     device.delete()
     return redirect('device_list')
 
 #IPv4
+@login_required
 def ipv4_list(request):
     ipv4networks = Network.objects.all()
     ipv4networkfilter = NetworkFilter(request.POST, queryset=ipv4networks)
     context = {'ipv4networks': ipv4networks, 'filter': ipv4networkfilter}
     return render(request, 'inventory/ipv4_list.html', context)
 
+@login_required
 def ipv4_detail(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
     gwfind = list(iptools.IpRangeList(ipv4network.network).__iter__())
@@ -405,6 +456,7 @@ def ipv4_detail(request, pk):
     context = {'ipv4network': ipv4network, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto}
     return render(request, 'inventory/ipv4_detail.html', context)
 
+@login_required
 def ipv4_new(request):
     if request.method == "POST":
         form = NetworkForm(request.POST)
@@ -416,6 +468,7 @@ def ipv4_new(request):
         form = NetworkForm()
     return render(request, 'inventory/ipv4_edit.html', {'form': form})
 
+@login_required
 def ipv4_edit(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
     if request.method == "POST":
@@ -428,22 +481,25 @@ def ipv4_edit(request, pk):
         form = NetworkForm(instance=ipv4network)
     return render(request, 'inventory/ipv4_edit.html', {'form': form})
 
+@login_required
 def ipv4_sepor(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
     subnets = list(ipaddress.ip_network(ipv4network).subnets())
     for subnet in subnets:
-        Network.objects.create(network=subnet)
+        Network.objects.create(network=subnet, segment=ipv4network.segment)
     ipv4network.delete()
     ipv4networks = Network.objects.all()
     return redirect('ipv4_list')
 
 #Удалить подсеть
+@login_required
 def ipv4_remove(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
     ipv4network.delete()
     return redirect('ipv4_list')
 
 #Фильтрация
+@login_required
 def popfilter(request):
     poplist = Pop.objects.all()
     popfilter = PopFilter(request.POST, queryset=poplist)

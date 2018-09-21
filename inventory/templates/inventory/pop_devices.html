@@ -1,75 +1,41 @@
 {% extends 'inventory/base_inet.html' %}
 {% block content %}
-<style type="text/css">
-  h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .delbutton {
-    color: #fff;
-    background-color: #FF0000;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .filterbutton {
-    color: #fff;
-    background-color: #999999;
-    border: none;
-    height: 32px;
-    width: 72px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-
-</style>
-<table width='100%'>
-  <tr style="height: 30px;">
-    <td ><h4><p>Существующие:</h4></td>
-    <td ><h4><p>{{ device.dnsname }}</h4></td>
+{% if user.is_authenticated %}
+  {% for group in  request.user.groups.all %}
+    {%  if 'noc' == group.name %}
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Существующие:</th>
+    <th><a href="{% url 'pop_detail' pk=pop.pk %}">{{ pop.title }}</a></th>
   </tr>
+</thead>
   {% for i in device %}
   <tr style="height: 30px;">
-    <td width='15%'><b>устройство:</b></td>
+    <td width="15%">Устройство:</td>
     <td><a href="{% url 'device_detail' pk=i.pk %}">{{ i }}</a></td>
-    <td><input class="delbutton" type="button" value="УДАЛИТЬ" onclick="location.href='{% url 'pop_device_remove' poppk=pop.pk devicepk=i.pk %}'"></td>
+    <td><input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="УДАЛИТЬ" onclick="location.href='{% url 'pop_device_remove' poppk=pop.pk devicepk=i.pk %}'"></td>
   </tr>
   {% endfor %}
   <tr style="height: 30px;">
-    <td ><h4><p>Добавить:</h4></td>
+    <td><strong>Добавить:</strong></td>
     <td>
       <form method="POST">{% csrf_token %}
       {{ filter.form.as_p }}
     </td>
     <td>
-      <button class="filterbutton" type="submit">ФИЛЬТР</button>
+      <button class="btn btn-light btn-sm" style="float: right; height: 32px; width: 92px;" type="submit">ФИЛЬТР</button>
     </td>
   </tr>
   {% for device in filter.qs %}
-  <tr style="height: 30px;">
-    <td width='15%'><b>Подключение:</b></td>
+  <tr>
+    <td width="15%">Подключение:</td>
     <td><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></td>
-    <td><input class="addbutton" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'pop_device_add' poppk=pop.pk devicepk=device.pk %}'"></td>
+    <td><input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'pop_device_add' poppk=pop.pk devicepk=device.pk %}'"></td>
   </tr>
   {% endfor %}
 </table>
+    {% endif %}
+  {% endfor %}
+{% endif %}
 {% endblock %}

@@ -1,35 +1,5 @@
 {% extends 'inventory/base_ipam.html' %}
 {% block content %}
-<style type="text/css">
-  h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .delbutton {
-    color: #fff;
-    background-color: #FF0000;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-</style>
 
 {% if user.is_authenticated %}
 <script>
@@ -42,58 +12,74 @@ function delconfirm() {
   }
 }
 </script>
-
-<input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'ipv4_edit' pk=ipv4network.pk %}'">
 {% endif %}
 
-<table width='100%'>
-  <tr style="height: 30px;">
-    <td width="15%"><h4>IP Сеть:</h4></td>
-    <td><h4>{{ ipv4network.network }}</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>IP Сеть:</th>
+    <th>{{ ipv4network.network }}</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+            <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'ipv4_edit' pk=ipv4network.pk %}'">
+            <input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px; margin-right: 10px;" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Статус:</b></td>
+  </thead>
+  <tr>
+    <td>Статус:</td>
     <td>{{ ipv4network.status|linebreaksbr }}</td>
   </tr>
+  <tr>
+    <td>Сегмент:</td>
+  {% if ipv4network.segment != None %}
+    <td>{{ ipv4network.segment|linebreaksbr }}</td>
+  {% elif ipv4network.segment == None %}
+    <td>Не выбран</td>
+  {% endif %}
+  </tr>
   {% if ipv4network.tocore != None %}
-  <tr style="height: 30px;">
-    <td><b>Опорный узел:</b></td>
+  <tr>
+    <td>Опорный узел:</td>
     <td>{{ ipv4network.tocore|linebreaksbr }}</td>
   </tr>
   {% endif %}
   {% if ipv4network.topop != None %}
-  <tr style="height: 30px;">
-    <td><b>Точка присутствия:</b></td>
+  <tr>
+    <td>Точка присутствия:</td>
     <td>{{ ipv4network.topop|linebreaksbr }}</td>
   </tr>
   {% endif %}
   {% if ipv4network.tocustomer != None %}
-  <tr style="height: 30px;">
-    <td><b>Клиент:</b></td>
+  <tr>
+    <td>Клиент:</td>
     <td>{{ ipv4network.tocustomer|linebreaksbr }}</td>
   </tr>
   {% endif %}
-  <tr style="height: 30px;">
-    <td><b>Комментарий:</b></td>
+  <tr>
+    <td>Комментарий:</td>
     <td>{{ ipv4network.comment|linebreaksbr }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>IP-адреса:</b></td>
+  <tr>
+    <td>IP-адреса:</td>
     <td>{{ ipfrom }} - {{ ipto }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Шлюз по умолчанию:</b></td>
+  <tr>
+    <td>Шлюз по умолчанию:</td>
     <td>{{ gw }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Первичный DNS:</b></td>
+  <tr>
+    <td>Первичный DNS:</td>
     <td>188.65.128.26</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Вторичный DNS:</b></td>
+  <tr>
+    <td>Вторичный DNS:</td>
     <td>188.65.130.130</td>
   </tr>
 </table>
-
 {% endblock %}

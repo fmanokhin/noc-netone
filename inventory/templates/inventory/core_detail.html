@@ -1,36 +1,9 @@
 {% extends 'inventory/base_inet.html' %}
 {% block content %}
-<style type="text/css">
-  h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #444444;
-  }
-  table {
-    border-spacing: 0px;
-    border-left: 2px solid #7e7e7e;
-    padding-top: 0px;
-    padding-left: 15px;
-    background-color: #FFFFFF;
-  }
-  .addbutton {
-    color: #fff;
-    background-color: #FF9900;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-  .delbutton {
-    color: #fff;
-    background-color: #FF0000;
-    border: none;
-    height: 32px;
-    font-family: 'Oswald', sans-serif;
-    float: right;
-  }
-</style>
+
 {% if user.is_authenticated %}
+  {% for group in  request.user.groups.all %}
+    {%  if 'noc' == group.name %}
 <script>
 function delconfirm() {
   var user_choice = window.confirm('Вы уверены?');
@@ -41,80 +14,124 @@ function delconfirm() {
   }
 }
 </script>
-<input class="delbutton" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_edit' pk=core.pk %}'">
+    {% endif %}
+  {% endfor %}
 {% endif %}
-<table width='100%'>
-  <tr style="height: 30px;">
-    <td width="15%"><h4>CORE:</h4></td>
-    <td><h4>{{ core.title }}</h4></td>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>CORE:</th>
+    <th>{{ core.title }}</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+      <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'core_edit' pk=core.pk %}'">
+      <input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px; margin-right: 10px;" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Адрес:</b></td>
-    <td>{{ core.address|linebreaksbr }}</td>
+  </thead>
+  <tr>
+    <td>Адрес:</td>
+    <td>{{ core.address|default_if_none:"&nbsp;" }}</td>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Контакты:</b></td>
-    <td>{{ core.contacts|linebreaksbr }}</td>
+  <tr>
+    <td>Контакты:</td>
+    <td>{{ core.contacts|default_if_none:"&nbsp;" }}</td>
+  </tr>
+  <tr>
+    <td>Менеджер:</td>
+    <td>{{ core.manager|default_if_none:"&nbsp;" }}</td>
+  </tr>
+  <tr>
+    <td>Скорость:</td>
+    <td>{{ core.bandwidth|default_if_none:"&nbsp;" }}</td>
+  </tr>
+  <tr>
+    <td>Пул vlan:</td>
+    <td>{{ core.vlans|default_if_none:"&nbsp;" }}</td>
   </tr>
 </table>
 
-{% if user.is_authenticated %}
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_devices' pk=core.pk %}'">
-{% else %}
-<p>
-{% endif %}
-<table width='100%'>
-  <tr style="height: 20px;">
-    <td width="15%"><h4>Оборудование:</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Оборудование</th>
+    <th></th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+          <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'core_devices' pk=core.pk %}'">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Модель:</b></td>
-    <td><b>Имя:</b></td>
-    <td><b>Прочее:</b></td>
+  </thead>
+  <tr class="table-active">
+    <td width='30%'>Модель:</td>
+    <td>Имя:</td>
+    <td>Прочее:</td>
   </tr>
   {% for d in device %}
   <tr style="height: 30px;">
-    <td><b>{{d.vendor}} {{d.model}}</b></td>
+    <td width='30%'>{{d.vendor}} {{d.model}}</td>
     <td><a href="{% url 'device_detail' pk=d.pk %}">{{ d }}</a</td>
     <td><a href = "telnet://{{d.ipaddress}}">connect</td>
   </tr>
   {% endfor %}
 </table>
 
-{% if user.is_authenticated %}
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_ipv4networks' pk=core.pk %}'">
-{% else %}
-<p>
-{% endif %}
-<table width='100%'>
-  <tr style="height: 20px;">
-    <td width="15%"><h4>Сети IPv4:</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Сети IPv4</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+          <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'core_ipv4networks' pk=core.pk %}'">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
-  <tr style="height: 30px;">
-    <td><b>Сеть:</b></td>
-    <td><b>Описание:</b></td>
+</thead>
+  <tr class="table-active">
+    <td width='30%'>Сеть:</td>
+    <td>Описание:</td>
   </tr>
   {% for n in network %}
-  <tr style="height: 30px;">
-    <td><a href="{% url 'ipv4_detail' pk=n.pk %}">{{ n }}</a</td>
+  <tr>
+    <td width='30%'><a href="{% url 'ipv4_detail' pk=n.pk %}">{{ n }}</a</td>
     <td>{{ n.comment }}</td>
   </tr>
   {% endfor %}
 </table>
 
-{% if user.is_authenticated %}
-<input class="addbutton" type="button" value="РЕДАКТИРОВАТЬ" onclick="location.href='{% url 'core_downstreams' pk=core.pk %}'">
-{% else %}
-<p>
-{% endif %}
-<table width='100%'>
-  <tr style="height: 30px;">
-    <td width="15%"><h4>Downstreams:</h4></td>
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Downstreams</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+          <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'core_downstreams' pk=core.pk %}'">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
   </tr>
+  </thead>
   {% for i in downstream %}
-  <tr style="height: 30px;">
-    <td><b>Подключение:</b></td>
+  <tr>
+    <td width='30%'>Подключение:</td>
     <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
   </tr>
   {% endfor %}

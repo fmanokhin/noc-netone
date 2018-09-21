@@ -17,6 +17,7 @@ button {
 	background-color: #FF9900;
 	border: none;
 	height: 32px;
+	width: 72px;
 	font-family: 'Oswald', sans-serif;
 }
 
@@ -29,21 +30,6 @@ p {
 }
 
 
-header {
-	padding: 10px 0;
-  background-color: #666666;
-}
-header h1 a{
-	text-decoration: none;
-	color: #f8f8f8;
-}
-header a img{
-	padding: 0 10px;
-}
-
-form[name="search"] {
-	float: right;
-}
 
 nav a {
 	text-decoration: none;
@@ -85,21 +71,6 @@ nav li {
 	color: #b2b2b2;
 }
 
-#heading {
-	background: transparent url("{% static '/img/h1-bg.png' %}");
-	margin: 20px 0;
-}
-h1 {
-	display: inline-block;
-	color: #7e7e7e;
-	font: 40px/40px 'Oswald', sans-serif;
-	background: transparent url("{% static '/img/h1-bg.png' %}");
-	margin: 0;
-	padding: 0 10px;
-}
-h1 a {
-	padding: 0 30px;
-}
 aside {
 	float: left;
 	width: 250px;
@@ -160,10 +131,8 @@ footer {
 	margin: auto;
 }
 
-#footer {
-	max-width: 1300px;
-	margin: 10px;
-}
+
+
 footer a {
 	color: #dbdbdb;
 }
