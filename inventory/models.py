@@ -8,10 +8,10 @@ class Core(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100, blank=True, null=True)
-    manager = models.CharField(max_length=100, blank=True, null=True)
-    bandwidth = models.CharField(max_length=100, blank=True, null=True)
-    vlans = models.CharField(max_length=100, blank=True, null=True)
+    contacts = models.CharField(max_length=100, blank=True)
+    manager = models.CharField(max_length=100, blank=True)
+    bandwidth = models.CharField(max_length=100, blank=True)
+    vlans = models.CharField(max_length=100, blank=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -31,11 +31,11 @@ class Pop(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100, blank=True, null=True)
-    manager = models.CharField(max_length=100, blank=True, null=True)
-    bandwidth = models.CharField(max_length=100, blank=True, null=True)
-    vlans = models.CharField(max_length=100, blank=True, null=True)
-    comments = models.CharField(max_length=100, blank=True, null=True)
+    contacts = models.CharField(max_length=100, blank=True)
+    manager = models.CharField(max_length=100, blank=True)
+    bandwidth = models.CharField(max_length=100, blank=True)
+    vlans = models.CharField(max_length=100, blank=True)
+    comments = models.CharField(max_length=100, blank=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -61,16 +61,16 @@ class Customer(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100, blank=True, null=True)
-    manager = models.CharField(max_length=100, blank=True, null=True)
-    comments = models.CharField(max_length=100, blank=True, null=True)
+    contacts = models.CharField(max_length=100, blank=True)
+    manager = models.CharField(max_length=100, blank=True)
+    comments = models.CharField(max_length=100, blank=True)
     upstream = models.ManyToManyField(Pop, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
     #поле "подключение" на странице клиента
-    switch = models.CharField(max_length=100, blank=True, null=True)
-    vlans = models.CharField(max_length=100, blank=True, null=True)
-    bandwidth = models.CharField(max_length=100, blank=True, null=True)
+    switch = models.CharField(max_length=100, blank=True)
+    vlans = models.CharField(max_length=100, blank=True)
+    bandwidth = models.CharField(max_length=100, blank=True)
 
     def new_customer(self):
         self.save()
@@ -81,7 +81,7 @@ class Customer(models.Model):
 class Device(models.Model):
     vendor = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
-    dnsname = models.CharField(max_length=100, blank=True, null=True)
+    dnsname = models.CharField(max_length=100, blank=True)
     dnsname.help_text = ''
     dnsname.verbose_name = ''
     ipaddress = models.CharField(max_length=100)
@@ -119,9 +119,9 @@ class Network(models.Model):
     )
     network = models.CharField(max_length=18, validators=[ipaddrvalid])
     status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
-    segment = models.CharField(max_length=9, choices=SEGMENT_CHOISES, null=True)
-    comment = models.CharField(max_length=100, blank=True, null=True)
-    tocore = models.ForeignKey(Core, on_delete=models.CASCADE, blank=True, null=True)
+    segment = models.CharField(max_length=9, choices=SEGMENT_CHOISES)
+    comment = models.CharField(max_length=100, blank=True)
+    tocore = models.ForeignKey(Core, on_delete=models.CASCADE, blank=True, null=Tru)
     topop = models.ForeignKey(Pop, on_delete=models.CASCADE, blank=True, null=True)
     tocustomer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
 

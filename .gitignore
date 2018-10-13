@@ -1,6 +1,7 @@
 *.pyc
 *~
 __pycache__
+inventory/migrations
 nocvenv
 nocnetone/settings.py
 .DS_Store
