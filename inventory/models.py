@@ -4,7 +4,7 @@ ipaddrvalid = RegexValidator(r"^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|
 #Create your models here.
 # Модель узла
 class Core(models.Model):
-    title = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100)
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
@@ -27,15 +27,15 @@ class Core(models.Model):
 
 # Модель точки присутствия
 class Pop(models.Model):
-    title = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100)
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100, blank=True)
-    manager = models.CharField(max_length=100)
-    bandwidth = models.CharField(max_length=100, blank=True)
-    vlans = models.CharField(max_length=100)
-    comments = models.CharField(max_length=100, blank=True)
+    contacts = models.CharField(max_length=100, blank=True, null=True)
+    manager = models.CharField(max_length=100, blank=True, null=True)
+    bandwidth = models.CharField(max_length=100, blank=True, null=True)
+    vlans = models.CharField(max_length=100, blank=True, null=True)
+    comments = models.CharField(max_length=100, blank=True, null=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -57,20 +57,20 @@ class Pop(models.Model):
 
 #Модель Клиента
 class Customer(models.Model):
-    title = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100)
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.CharField(max_length=100)
-    manager = models.CharField(max_length=100)
-    comments = models.CharField(max_length=100, blank=True)
+    contacts = models.CharField(max_length=100, blank=True, null=True)
+    manager = models.CharField(max_length=100, blank=True, null=True)
+    comments = models.CharField(max_length=100, blank=True, null=True)
     upstream = models.ManyToManyField(Pop, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
     #поле "подключение" на странице клиента
-    switch = models.CharField(max_length=100)
-    vlans = models.CharField(max_length=100)
-    bandwidth = models.CharField(max_length=100)
+    switch = models.CharField(max_length=100, blank=True, null=True)
+    vlans = models.CharField(max_length=100, blank=True, null=True)
+    bandwidth = models.CharField(max_length=100, blank=True, null=True)
 
     def new_customer(self):
         self.save()
@@ -81,15 +81,15 @@ class Customer(models.Model):
 class Device(models.Model):
     vendor = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
-    dnsname = models.CharField(max_length=100, blank=True)
+    dnsname = models.CharField(max_length=100, blank=True, null=True)
     dnsname.help_text = ''
     dnsname.verbose_name = ''
     ipaddress = models.CharField(max_length=100)
     geoaddress = models.CharField(max_length=100)
-    coreaddress = models.ManyToManyField(Core, blank='True')
+    coreaddress = models.ManyToManyField(Core, blank=True)
     coreaddress.help_text = ''
     coreaddress.verbose_name = ''
-    address = models.ManyToManyField(Pop, blank='True')
+    address = models.ManyToManyField(Pop, blank=True)
     address.help_text = ''
     address.verbose_name = ''
 
@@ -120,7 +120,7 @@ class Network(models.Model):
     network = models.CharField(max_length=18, validators=[ipaddrvalid])
     status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
     segment = models.CharField(max_length=9, choices=SEGMENT_CHOISES, null=True)
-    comment = models.CharField(max_length=100, blank=True)
+    comment = models.CharField(max_length=100, blank=True, null=True)
     tocore = models.ForeignKey(Core, on_delete=models.CASCADE, blank=True, null=True)
     topop = models.ForeignKey(Pop, on_delete=models.CASCADE, blank=True, null=True)
     tocustomer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
