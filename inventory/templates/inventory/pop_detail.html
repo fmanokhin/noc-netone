@@ -148,6 +148,29 @@ function delconfirm() {
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
           {%  if 'noc' == group.name %}
+      <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px;" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'otherpop_downstreams' pk=pop.pk %}'">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
+  </tr>
+</thead>
+  {% for x in otherpopsdownstream %}
+  <tr>
+    <td width='30%'>Точка:</td>
+    <td><a href="{% url 'pop_detail' pk=x.pk %}">{{ x }}</a</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Клиенты:</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
       <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px;" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'pop_downstreams' pk=pop.pk %}'">
           {% endif %}
         {% endfor %}

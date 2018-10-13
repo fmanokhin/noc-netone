@@ -2,6 +2,8 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+# Индекс редирект
+    url(r'^$', views.core_list, name='core_list'),
 # Точки присутствия:
     url(r'^internet/pops/$', views.pop_list, name='pop_list'),
     url(r'^internet/pop/(?P<pk>\d+)/$', views.pop_detail, name='pop_detail'),
@@ -37,11 +39,15 @@ urlpatterns = [
     url(r'^internet/pop/(?P<pk>\d+)/edit/devices/$', views.pop_devices, name='pop_devices'),
     url(r'^internet/pop/(?P<poppk>\d+)/devices/remove/(?P<devicepk>\d+)/$', views.pop_device_remove, name='pop_device_remove'),
     url(r'^internet/pop/(?P<poppk>\d+)/devices/add/(?P<devicepk>\d+)/$', views.pop_device_add, name='pop_device_add'),
-# На Точках присутствия (апстиримы)
+# На Точках присутствия (апстиримы-коры)
     url(r'^internet/pop/(?P<pk>\d+)/edit/upstreams/$', views.pop_upstreams, name='pop_upstreams'),
     url(r'^internet/pop/(?P<poppk>\d+)/upstreams/remove/(?P<corepk>\d+)/$', views.pop_upstreams_remove, name='pop_upstreams_remove'),
     url(r'^internet/pop/(?P<poppk>\d+)/upstreams/add/(?P<corepk>\d+)/$', views.pop_upstreams_add, name='pop_upstreams_add'),
-# На Точках присутствия (даунстримы)
+# На точках присутствия (даунстримы-другие точки)
+    url(r'^internet/pop/(?P<pk>\d+)/edit/downstreams/otherpop/$', views.otherpop_downstreams, name='otherpop_downstreams'),
+    url(r'^internet/pop/(?P<poppk>\d+)/downstreams/otherpop/remove/(?P<otherpoppk>\d+)/$', views.otherpop_downstreams_remove, name='otherpop_downstreams_remove'),
+    url(r'^internet/pop/(?P<poppk>\d+)/downstreams/otherpop/add/(?P<otherpoppk>\d+)/$', views.otherpop_downstreams_add, name='otherpop_downstreams_add'),
+# На Точках присутствия (даунстримы-клиенты)
     url(r'^internet/pop/(?P<pk>\d+)/edit/downstreams/$', views.pop_downstreams, name='pop_downstreams'),
     url(r'^internet/pop/(?P<poppk>\d+)/downstreams/remove/(?P<customerpk>\d+)/$', views.pop_downstreams_remove, name='pop_downstreams_remove'),
     url(r'^internet/pop/(?P<poppk>\d+)/downstreams/add/(?P<customerpk>\d+)/$', views.pop_downstreams_add, name='pop_downstreams_add'),

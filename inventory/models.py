@@ -42,6 +42,9 @@ class Pop(models.Model):
     upstream = models.ManyToManyField(Core, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
+    otherpopsdownstream = models.ManyToManyField('Pop', blank=True)
+    otherpopsdownstream.help_text = ''
+    otherpopsdownstream.verbose_name = ''
     downstream = models.ManyToManyField('Customer', blank=True)
     downstream.help_text = ''
     downstream.verbose_name = ''

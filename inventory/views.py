@@ -23,7 +23,8 @@ def pop_detail(request, pk):
     network = Pop.objects.get(pk=pk).network_set.all()
     upstream = Pop.objects.get(pk=pk).core_set.all()
     downstream = Pop.objects.get(pk=pk).customer_set.all()
-    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream}
+    otherpopsdownstream = Pop.objects.get(pk=pk).pop_set.all()
+    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream, 'otherpopsdownstream': otherpopsdownstream}
     return render(request, 'inventory/pop_detail.html', context)
 
 # Создать точку присутствия
@@ -254,7 +255,29 @@ def pop_upstreams_add(request, poppk, corepk):
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('pop_list')
 
-# На Точках присутствия (даунстримы)
+# На Точках присутсвия (даунстримы-другие точки)
+@login_required
+def otherpop_downstreams(request, pk):
+    pop = get_object_or_404(Pop, pk=pk)
+    otherpops = Pop.objects.all()
+    otherpopsdownstream = Pop.objects.get(pk=pk).pop_set.all()
+    popfilter = PopFilter(request.POST, queryset=otherpops)
+    context = {'pop': pop, 'otherpopsdownstream': otherpopsdownstream, 'otherpops': otherpops, 'filter': popfilter}
+    return render(request, 'inventory/otherpops_downstreams.html', context)
+
+@login_required
+def otherpop_downstreams_remove(request, otherpoppk, poppk):
+    Pop.objects.get(pk=poppk).pop_set.remove(Pop.objects.get(pk=otherpoppk))
+#    Pop.objects.get(pk=otherpoppk).pop_set.remove(Pop.objects.get(pk=poppk))
+    return redirect('pop_list')
+
+@login_required
+def otherpop_downstreams_add(request, otherpoppk, poppk):
+    Pop.objects.get(pk=poppk).pop_set.add(Pop.objects.get(pk=otherpoppk))
+#    Pop.objects.get(pk=otherpoppk).pop_set.add(Pop.objects.get(pk=poppk))
+    return redirect('pop_list')
+
+# На Точках присутствия (даунстримы-клиенты)
 @login_required
 def pop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
