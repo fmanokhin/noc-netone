@@ -1,5 +1,5 @@
 import django_filters
-from .models import Pop, Core, Customer, Device, Network, PopConnection
+from .models import Pop, Core, Customer, Device, Network
 
 class PopFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr='icontains', label='')
@@ -36,9 +36,3 @@ class NetworkFilterNoStut(django_filters.FilterSet):
     class Meta:
         model = Network
         fields = ['network',]
-
-class PopConnectionFilter(django_filters.FilterSet):
-    title = django_filters.CharFilter(lookup_expr='icontains', label='')
-    class Meta:
-        model = PopConnection
-        fields = ['upstreampop',]
