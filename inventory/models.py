@@ -39,21 +39,34 @@ class Pop(models.Model):
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
+    #апстирм коры
     upstream = models.ManyToManyField(Core, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
-    otherpopsdownstream = models.ManyToManyField('Pop', blank=True)
-    otherpopsdownstream.help_text = ''
-    otherpopsdownstream.verbose_name = ''
+    #даустрим клиенты
     downstream = models.ManyToManyField('Customer', blank=True)
     downstream.help_text = ''
     downstream.verbose_name = ''
+    #даунстрим другие точки
+    downstreampop = models.ManyToManyField('PopConnection', blank=True)
 
     def new_pop(self):
         self.save()
 
     def __str__(self):
         return self.title
+
+class PopConnection(models.Model):
+    upstreampop = models.ManyToManyField(Pop, blank=True)
+    upstreampop.help_text = ''
+    upstreampop.verbose_name = ''
+
+    def new_pop(self):
+        self.save()
+
+    def __str__(self):
+        return self.title
+
 
 #Модель Клиента
 class Customer(models.Model):

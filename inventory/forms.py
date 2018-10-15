@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Pop, Core, Customer, Device, Network
+from .models import Pop, Core, Customer, Device, Network, PopConnection
 
 class PopForm(forms.ModelForm):
 
@@ -37,3 +37,9 @@ class NetworkForm(forms.ModelForm):
     class Meta:
         model = Network
         fields = ('network', 'status', 'segment', 'comment',)
+
+class PopConnectionForm(forms.ModelForm):
+
+    class Meta:
+        model = PopConnection
+        fields= ('upstreampop',)

@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
-from .models import Pop, Core, Customer, Device, Network
-from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm
+from .models import Pop, Core, Customer, Device, Network, PopConnection
+from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm, PopConnectionForm
 from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
 import ipaddress, iptools
 
@@ -23,8 +23,7 @@ def pop_detail(request, pk):
     network = Pop.objects.get(pk=pk).network_set.all()
     upstream = Pop.objects.get(pk=pk).core_set.all()
     downstream = Pop.objects.get(pk=pk).customer_set.all()
-    otherpopsdownstream = Pop.objects.get(pk=pk).pop_set.all()
-    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream, 'otherpopsdownstream': otherpopsdownstream}
+    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream}
     return render(request, 'inventory/pop_detail.html', context)
 
 # Создать точку присутствия
@@ -255,34 +254,12 @@ def pop_upstreams_add(request, poppk, corepk):
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('pop_list')
 
-# На Точках присутсвия (даунстримы-другие точки)
-@login_required
-def otherpop_downstreams(request, pk):
-    pop = get_object_or_404(Pop, pk=pk)
-    otherpops = Pop.objects.all()
-    otherpopsdownstream = Pop.objects.get(pk=pk).pop_set.all()
-    popfilter = PopFilter(request.POST, queryset=otherpops)
-    context = {'pop': pop, 'otherpopsdownstream': otherpopsdownstream, 'otherpops': otherpops, 'filter': popfilter}
-    return render(request, 'inventory/otherpops_downstreams.html', context)
-
-@login_required
-def otherpop_downstreams_remove(request, otherpoppk, poppk):
-    Pop.objects.get(pk=poppk).pop_set.remove(Pop.objects.get(pk=otherpoppk))
-#    Pop.objects.get(pk=otherpoppk).pop_set.remove(Pop.objects.get(pk=poppk))
-    return redirect('pop_list')
-
-@login_required
-def otherpop_downstreams_add(request, otherpoppk, poppk):
-    Pop.objects.get(pk=poppk).pop_set.add(Pop.objects.get(pk=otherpoppk))
-#    Pop.objects.get(pk=otherpoppk).pop_set.add(Pop.objects.get(pk=poppk))
-    return redirect('pop_list')
-
 # На Точках присутствия (даунстримы-клиенты)
 @login_required
 def pop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
     customers = Customer.objects.all()
-    downstream = Pop.objects.get(pk=pk).customer_set.all()
+    downstream = Pop.objects.customer_set.all()
     customerfilter = CustomerFilter(request.POST, queryset=customers)
     context = {'pop': pop, 'downstream': downstream, 'customers': customers, 'filter': customerfilter}
     return render(request, 'inventory/pop_downstreams.html', context)
@@ -297,6 +274,35 @@ def pop_downstreams_remove(request, customerpk, poppk):
 def pop_downstreams_add(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.add(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
+    return redirect('pop_list')
+
+#На Точках присутствия (подключения)
+#Список текущих подключений
+@login_required
+def popconnection_list(request):
+    popconnections = PopConnection.objects.all()
+    popconnectionsfilter = PopFilter(request.POST, queryset=popconnections)
+    context = {'popconnections': popconnections, 'filter': popconnectionsfilter}
+    return render(request, 'inventory/popconnections_list.html', context)
+
+#Детали подключения
+@login_required
+def popconnection_detail(request, poppk, pk):
+    popconnection = get_object_or_404(PopConnection, pk=pk)
+    context = {'popconnection': popconnection}
+    return render(request, 'inventory/popconnection_detail.html', context)
+
+#Создать подключение
+@login_required
+def popconnection_new(request, pk):
+    Pop.objects.get(pk=pk).popconnection_set.add(PopConnection.objects.create())
+    return redirect('pop_detail', pk)
+
+#Удалить Подключение
+@login_required
+def popconnection_remove(request, pk):
+    popconnection = get_object_or_404(PopConnection, pk=pk)
+    poppopconnection.delete()
     return redirect('pop_list')
 
 # На Клиентах (апстримы)

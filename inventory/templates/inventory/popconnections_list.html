@@ -1,0 +1,40 @@
+{% extends 'inventory/base_inet.html' %}
+{% block content %}
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+    <tr>
+      <th>Точка присутствия</th>
+      <th>VLAN</th>
+      <th>Адрес</th>
+      <th>
+        {% if user.is_authenticated %}
+          {% for group in  request.user.groups.all %}
+            {%  if 'noc' == group.name %}
+        <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'popconnection_new' %}'">
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    <form method="POST">{% csrf_token %}
+    {{ filter.form.as_p }}
+  </td>
+  <td></td>
+  <td>
+    <button class="btn btn-light btn-sm" style="height: 32px; width: 92px;" type="submit">ФИЛЬТР</button>
+  </td>
+</tr>
+
+{% for pop in filter.qs %}
+<tr>
+  <td width="400px"><a href="{% url 'pop_detail' pk=pop.pk %}">{{ pop.title }}</a></td>
+  <td width="200px">{{ pop.vlans|linebreaksbr }}</td>
+  <td>{{ pop.address|linebreaksbr }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
