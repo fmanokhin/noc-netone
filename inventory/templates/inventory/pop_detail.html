@@ -120,7 +120,7 @@ function delconfirm() {
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>
   <tr>
-    <th>Upstreams:</th>
+    <th>Upstream Core:</th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -143,7 +143,30 @@ function delconfirm() {
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>
   <tr>
-    <th>Downstreams:</th>
+    <th>Upstream:</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+      <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px;" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'otherpop_upstreams' pk=pop.pk %}'">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
+  </tr>
+</thead>
+  {% for x in otherpopsupstream %}
+  <tr>
+    <td width='30%'>Точка:</td>
+    <td><a href="{% url 'pop_detail' pk=x.pk %}">{{ x }}</a</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Downstream:</th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -155,10 +178,10 @@ function delconfirm() {
     </th>
   </tr>
 </thead>
-  {% for x in otherpopsdownstream %}
+  {% for y in otherpopsdownstream %}
   <tr>
     <td width='30%'>Точка:</td>
-    <td><a href="{% url 'pop_detail' pk=x.pk %}">{{ x }}</a</td>
+    <td><a href="{% url 'pop_detail' pk=y.pk %}">{{ y }}</a</td>
   </tr>
   {% endfor %}
 </table>
@@ -178,10 +201,10 @@ function delconfirm() {
     </th>
   </tr>
 </thead>
-  {% for x in downstream %}
+  {% for z in downstream %}
   <tr>
     <td width='30%'>Клиент:</td>
-    <td><a href="{% url 'customer_detail' pk=x.pk %}">{{ x }}</a</td>
+    <td><a href="{% url 'customer_detail' pk=z.pk %}">{{ z }}</a</td>
   </tr>
   {% endfor %}
 </table>

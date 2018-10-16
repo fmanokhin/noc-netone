@@ -43,10 +43,19 @@ urlpatterns = [
     url(r'^internet/pop/(?P<pk>\d+)/edit/upstreams/$', views.pop_upstreams, name='pop_upstreams'),
     url(r'^internet/pop/(?P<poppk>\d+)/upstreams/remove/(?P<corepk>\d+)/$', views.pop_upstreams_remove, name='pop_upstreams_remove'),
     url(r'^internet/pop/(?P<poppk>\d+)/upstreams/add/(?P<corepk>\d+)/$', views.pop_upstreams_add, name='pop_upstreams_add'),
+
+# На точках присутствия (апстримы-другие точки)
+    url(r'^internet/pop/(?P<pk>\d+)/edit/upstreams/otherpop/$', views.otherpop_upstreams, name='otherpop_upstreams'),
+    url(r'^internet/pop/(?P<poppk>\d+)/upstreams/otherpop/remove/(?P<otherpoppk>\d+)/$', views.otherpop_upstreams_remove, name='otherpop_upstreams_remove'),
+    url(r'^internet/pop/(?P<poppk>\d+)/upstreams/otherpop/add/(?P<otherpoppk>\d+)/$', views.otherpop_upstreams_add, name='otherpop_upstreams_add'),
+
+
 # На точках присутствия (даунстримы-другие точки)
     url(r'^internet/pop/(?P<pk>\d+)/edit/downstreams/otherpop/$', views.otherpop_downstreams, name='otherpop_downstreams'),
     url(r'^internet/pop/(?P<poppk>\d+)/downstreams/otherpop/remove/(?P<otherpoppk>\d+)/$', views.otherpop_downstreams_remove, name='otherpop_downstreams_remove'),
     url(r'^internet/pop/(?P<poppk>\d+)/downstreams/otherpop/add/(?P<otherpoppk>\d+)/$', views.otherpop_downstreams_add, name='otherpop_downstreams_add'),
+
+
 # На Точках присутствия (даунстримы-клиенты)
     url(r'^internet/pop/(?P<pk>\d+)/edit/downstreams/$', views.pop_downstreams, name='pop_downstreams'),
     url(r'^internet/pop/(?P<poppk>\d+)/downstreams/remove/(?P<customerpk>\d+)/$', views.pop_downstreams_remove, name='pop_downstreams_remove'),
