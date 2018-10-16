@@ -47,11 +47,18 @@ function delconfirm() {
     <td>Менеджер:</td>
     <td>{{ customer.manager|linebreaksbr }}</td>
   </tr>
-  <tr>
-    <td>Комментарий:</td>
-    <td>{{ customer.comments|linebreaksbr }}</td>
-  </tr>
 </table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Комментарии</th>
+  </tr>
+</thead>
+<tr>
+  <td>{{ customer.comments|linebreaksbr }}</td>
+</tr>
+</tables>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>

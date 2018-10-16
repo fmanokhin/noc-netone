@@ -12,7 +12,7 @@ class CoreForm(forms.ModelForm):
 
     class Meta:
         model = Core
-        fields = ('title','address', 'contacts','manager', 'bandwidth', 'vlans',)
+        fields = ('title','address', 'contacts','manager', 'bandwidth', 'vlans','comments',)
 
 class CustomerForm(forms.ModelForm):
 

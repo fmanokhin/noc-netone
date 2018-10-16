@@ -151,13 +151,13 @@ def core_downstreams(request, pk):
 def core_downstreams_remove(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.remove(Core.objects.get(pk=corepk))
-    return redirect('core_list')
+    return redirect('core_detail', corepk)
 
 @login_required
 def core_downstreams_add(request, corepk, poppk):
     Core.objects.get(pk=corepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
-    return redirect('core_list')
+    return redirect('core_detail', corepk)
 
 # На Корах (IPv4)
 @login_required
@@ -175,7 +175,7 @@ def core_ipv4network_remove(request, corepk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'FREE'
     network.save(update_fields=['status'])
-    return redirect('core_list')
+    return redirect('core_detail', corepk)
 
 @login_required
 def core_ipv4network_add(request, corepk, networkpk):
@@ -183,7 +183,7 @@ def core_ipv4network_add(request, corepk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'BUSY'
     network.save(update_fields=['status'])
-    return redirect('core_list')
+    return redirect('core_detail', corepk)
 
 # На Точках присутствия (IPv4)
 @login_required
@@ -201,7 +201,7 @@ def pop_ipv4network_remove(request, poppk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'FREE'
     network.save(update_fields=['status'])
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 @login_required
 def pop_ipv4network_add(request, poppk, networkpk):
@@ -209,7 +209,7 @@ def pop_ipv4network_add(request, poppk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'BUSY'
     network.save(update_fields=['status'])
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 # На Точках присутствия (оборудование)
 @login_required
@@ -248,13 +248,13 @@ def pop_upstreams(request, pk):
 def pop_upstreams_remove(request, poppk, corepk):
     Core.objects.get(pk=corepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.remove(Core.objects.get(pk=corepk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 @login_required
 def pop_upstreams_add(request, poppk, corepk):
     Core.objects.get(pk=corepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 # На Точках присутствия (апстрим- другие точки)
 @login_required
@@ -270,13 +270,13 @@ def otherpop_upstreams(request, pk):
 def otherpop_upstreams_remove(request, otherpoppk, poppk):
     Pop.objects.get(pk=otherpoppk).otherpops_upstream.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).otherpops_downstream.remove(Pop.objects.get(pk=otherpoppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 @login_required
 def otherpop_upstreams_add(request, otherpoppk, poppk):
     Pop.objects.get(pk=otherpoppk).otherpops_upstream.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).otherpops_downstream.add(Pop.objects.get(pk=otherpoppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 # На Точках присутсвия (даунстримы-другие точки)
 @login_required
@@ -292,13 +292,13 @@ def otherpop_downstreams(request, pk):
 def otherpop_downstreams_remove(request, otherpoppk, poppk):
     Pop.objects.get(pk=otherpoppk).otherpops_downstream.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).otherpops_upstream.remove(Pop.objects.get(pk=otherpoppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 @login_required
 def otherpop_downstreams_add(request, otherpoppk, poppk):
     Pop.objects.get(pk=otherpoppk).otherpops_downstream.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).otherpops_upstream.add(Pop.objects.get(pk=otherpoppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 # На Точках присутствия (даунстримы-клиенты)
 @login_required
@@ -314,13 +314,13 @@ def pop_downstreams(request, pk):
 def pop_downstreams_remove(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.remove(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.remove(Pop.objects.get(pk=poppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 @login_required
 def pop_downstreams_add(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.add(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
-    return redirect('pop_list')
+    return redirect('pop_detail', poppk)
 
 # На Клиентах (апстримы)
 @login_required
@@ -336,13 +336,13 @@ def customer_upstreams(request, pk):
 def customer_upstreams_remove(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.remove(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.remove(Pop.objects.get(pk=poppk))
-    return redirect('customer_list')
+    return redirect('customer_detail', customerpk)
 
 @login_required
 def customer_upstreams_add(request, customerpk, poppk):
     Pop.objects.get(pk=poppk).customer_set.add(Customer.objects.get(pk=customerpk))
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
-    return redirect('customer_list')
+    return redirect('customer_detail', customerpk)
 
 # На Клиентах (IPv4)
 @login_required
@@ -360,7 +360,7 @@ def customer_ipv4network_remove(request, customerpk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'FREE'
     network.save(update_fields=['status'])
-    return redirect('customer_list')
+    return redirect('customer_detail', customerpk)
 
 @login_required
 def customer_ipv4network_add(request, customerpk, networkpk):
@@ -368,7 +368,7 @@ def customer_ipv4network_add(request, customerpk, networkpk):
     network = Network.objects.get(pk=networkpk)
     network.status = 'BUSY'
     network.save(update_fields=['status'])
-    return redirect('customer_list')
+    return redirect('customer_detail', customerpk)
 
 # Клиенты
 # Отобразить всех клиентов
@@ -495,11 +495,12 @@ def ipv4_list(request):
 @login_required
 def ipv4_detail(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
+    mask = (ipaddress.ip_network(ipv4network.network)).netmask
     gwfind = list(iptools.IpRangeList(ipv4network.network).__iter__())
     gw = gwfind[1]
     ipfrom = gwfind[2]
     ipto = gwfind[-2]
-    context = {'ipv4network': ipv4network, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto}
+    context = {'ipv4network': ipv4network, 'mask': mask, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto}
     return render(request, 'inventory/ipv4_detail.html', context)
 
 @login_required

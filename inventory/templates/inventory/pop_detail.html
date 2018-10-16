@@ -51,11 +51,18 @@ function delconfirm() {
     <td>Ширина канала:</td>
     <td>{{ pop.bandwidth|linebreaksbr }}</td>
   </tr>
-  <tr>
-    <td>Комментарий:</td>
-    <td>{{ pop.comments|linebreaksbr }}<td>
-  </tr>
 </table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>Комментарии</th>
+  </tr>
+</thead>
+<tr>
+  <td>{{ pop.comments|linebreaksbr }}</td>
+</tr>
+</tables>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>
