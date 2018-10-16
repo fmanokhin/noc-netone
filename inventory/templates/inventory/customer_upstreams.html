@@ -13,7 +13,7 @@
   {% for i in upstream %}
   <tr>
     <td width="15%">Подключение:</td>
-    <td><a href="{% url 'customer_detail' pk=i.pk %}">{{ i }}</a></td>
+    <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
     <td><input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="УДАЛИТЬ" onclick="location.href='{% url 'customer_upstreams_remove' customerpk=customer.pk poppk=i.pk %}'"></td>
   </tr>
   {% endfor %}
@@ -30,7 +30,7 @@
   {% for pop in filter.qs %}
   <tr>
     <td width="15%">Подключение:</td>
-    <td><a href="{% url 'customer_detail' pk=pop.pk %}">{{ pop.title }}</a></td>
+    <td><a href="{% url 'pop_detail' pk=pop.pk %}">{{ pop.title }}</a></td>
     <td><input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'customer_upstreams_add' customerpk=customer.pk poppk=pop.pk %}'"></td>
   </tr>
   {% endfor %}
