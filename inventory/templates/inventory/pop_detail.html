@@ -69,6 +69,7 @@ function delconfirm() {
   <tr>
     <th>Оборудование</th>
     <th></th>
+    <th></th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -83,12 +84,14 @@ function delconfirm() {
   <tr class="table-active">
     <td width='30%'>Модель:</td>
     <td>Имя:</td>
+    <td>Комментарий:</td>
     <td>Прочее:</td>
   </tr>
   {% for d in device %}
   <tr>
     <td width='30%'>{{d.vendor}} {{d.model}}</td>
     <td><a href="{% url 'device_detail' pk=d.pk %}">{{ d }}</a</td>
+    <td>{{d.comments}}</td>
     <td><a href = "telnet://{{d.ipaddress}}">connect</td>
   </tr>
   {% endfor %}

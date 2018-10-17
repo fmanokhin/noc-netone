@@ -30,7 +30,7 @@ class DeviceForm(forms.ModelForm):
 
     class Meta:
         model = Device
-        fields = ('vendor', 'model', 'dnsname', 'ipaddress', 'geoaddress')
+        fields = ('vendor', 'model', 'dnsname', 'ipaddress', 'geoaddress', 'comments', 'serialnum')
 
 class NetworkForm(forms.ModelForm):
 

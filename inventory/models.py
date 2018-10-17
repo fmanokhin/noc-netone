@@ -90,6 +90,8 @@ class Device(models.Model):
     dnsname.verbose_name = ''
     ipaddress = models.CharField(max_length=100)
     geoaddress = models.CharField(max_length=100)
+    comments = models.CharField(max_length=100, blank=True)
+    serialnum = models.CharField(max_length=100, blank=True)
     coreaddress = models.ManyToManyField(Core, blank=True)
     coreaddress.help_text = ''
     coreaddress.verbose_name = ''

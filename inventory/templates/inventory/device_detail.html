@@ -21,8 +21,8 @@ function delconfirm() {
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>
   <tr>
-    <th>Производитель:</th>
-    <th>{{ device.vendor }}</th>
+    <th>Имя:</th>
+    <th>{{ device.dnsname }}</th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -36,20 +36,28 @@ function delconfirm() {
   </tr>
 </thead>
   <tr>
-    <td>Модель:</td>
-    <td>{{ device.model|linebreaksbr }}</td>
-  </tr>
-  <tr>
-    <td>Имя:</td>
-    <td>{{ device.dnsname|linebreaksbr }}</td>
-  </tr>
-  <tr>
     <td>IP-адрес:</td>
     <td>{{ device.ipaddress|linebreaksbr }}</td>
   </tr>
   <tr>
     <td>Адрес:</td>
     <td>{{ device.geoaddress|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Комментарий:</td>
+    <td>{{ device.comments|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Производитель:</td>
+    <td>{{ device.vendor|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Модель:</td>
+    <td>{{ device.model|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Серийный номер:</td>
+    <td>{{ device.serialnum|linebreaksbr }}</td>
   </tr>
 </table>
 {% endblock %}
