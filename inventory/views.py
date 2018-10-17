@@ -518,7 +518,9 @@ def ipv4_new(request):
         form = NetworkForm(request.POST)
         if form.is_valid():
             ipv4network = form.save(commit=False)
-            ipv4network.save()
+            if ipaddress.ip_network(ipv4network.network):
+                ipv4network.save()
+            else: form = NetworkForm()
         return redirect('ipv4_detail', pk=ipv4network.pk)
     else:
         form = NetworkForm()
