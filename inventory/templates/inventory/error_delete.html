@@ -1,0 +1,14 @@
+<html>
+{% if user.is_authenticated %}
+<script>
+function ErrorDelete(){
+ alert("Отключите все сети IPv4!");
+}
+</script>
+<body onload=ErrorDelete()>
+  <script>
+  window.history.back()
+  </script>
+</body>
+{% endif %}
+</html>

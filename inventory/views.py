@@ -59,7 +59,10 @@ def pop_edit(request, pk):
 @login_required
 def pop_remove(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
-    pop.delete()
+    try:
+        pop.delete()
+    except:
+        return render(request, 'inventory/error_delete.html')
     return redirect('pop_list')
 
 # Отобразить опорные узлы
@@ -111,7 +114,10 @@ def core_edit(request, pk):
 @login_required
 def core_remove(request, pk):
     core = get_object_or_404(Core, pk=pk)
-    core.delete()
+    try:
+        core.delete()
+    except:
+        return render(request, 'inventory/error_delete.html')
     return redirect('core_list')
 
 # Связки
@@ -419,7 +425,10 @@ def customer_edit(request, pk):
 @login_required
 def customer_remove(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
-    customer.delete()
+    try:
+        customer.delete()
+    except:
+        return render(request, 'inventory/error_delete.html')
     return redirect('customer_list')
 
 #Редактировать детали подключения клиента
