@@ -40,10 +40,6 @@ function delconfirm() {
     <td>{{ pop.address|linebreaksbr }}</td>
   </tr>
   <tr>
-    <td>Контакты:</td>
-    <td>{{ pop.contacts|linebreaksbr }}</td>
-  </tr>
-  <tr>
     <td>Менеджер:</td>
     <td>{{ pop.manager|linebreaksbr }}</td>
   </tr>
@@ -54,14 +50,14 @@ function delconfirm() {
 </table>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
-  <thead>
   <tr>
+    <th>Контакты</th>
     <th>Комментарии</th>
   </tr>
-</thead>
-<tr>
-  <td>{{ pop.comments|linebreaksbr }}</td>
-</tr>
+  <tr>
+    <td>{{ pop.contacts|linebreaksbr }}</td>
+    <td>{{ pop.comments|linebreaksbr }}</td>
+  </tr>
 </tables>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>

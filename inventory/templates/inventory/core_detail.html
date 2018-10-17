@@ -40,10 +40,6 @@ function delconfirm() {
     <td>{{ core.address|default_if_none:"&nbsp;" }}</td>
   </tr>
   <tr>
-    <td>Контакты:</td>
-    <td>{{ core.contacts|default_if_none:"&nbsp;" }}</td>
-  </tr>
-  <tr>
     <td>Менеджер:</td>
     <td>{{ core.manager|default_if_none:"&nbsp;" }}</td>
   </tr>
@@ -58,14 +54,14 @@ function delconfirm() {
 </table>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
-  <thead>
   <tr>
+    <th>Контакты</th>
     <th>Комментарии</th>
   </tr>
-</thead>
-<tr>
-  <td>{{ core.comments|linebreaksbr }}</td>
-</tr>
+  <tr>
+    <td>{{ core.contacts|linebreaksbr }}</td>
+    <td>{{ core.comments|linebreaksbr }}</td>
+  </tr>
 </tables>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
