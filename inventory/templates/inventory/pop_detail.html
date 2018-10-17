@@ -47,6 +47,10 @@ function delconfirm() {
     <td>Ширина канала:</td>
     <td>{{ pop.bandwidth|linebreaksbr }}</td>
   </tr>
+  <tr>
+    <td>Пул vlan:</td>
+    <td>{{ pop.vlans|default_if_none:"&nbsp;" }}</td>
+  </tr>
 </table>
 
 <table class="table table-sm table-borderless table-hover" width='100%'>
