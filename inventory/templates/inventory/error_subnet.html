@@ -1,0 +1,14 @@
+<html>
+{% if user.is_authenticated %}
+<script>
+function ErrorSubnet(){
+ alert("Некорректная сеть IPv4!");
+}
+</script>
+<body onload=ErrorSubnet()>
+  <script>
+  window.history.back()
+  </script>
+</body>
+{% endif %}
+</html>

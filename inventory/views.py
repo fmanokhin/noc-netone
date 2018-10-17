@@ -518,9 +518,13 @@ def ipv4_new(request):
         form = NetworkForm(request.POST)
         if form.is_valid():
             ipv4network = form.save(commit=False)
-            if ipaddress.ip_network(ipv4network.network):
-                ipv4network.save()
-            else: form = NetworkForm()
+            try:
+                if ipaddress.ip_network(ipv4network.network):
+                    ipv4network.save()
+                else:
+                    pass
+            except:
+                 return render(request, 'inventory/error_subnet.html')
         return redirect('ipv4_detail', pk=ipv4network.pk)
     else:
         form = NetworkForm()
@@ -533,8 +537,14 @@ def ipv4_edit(request, pk):
         form = NetworkForm(request.POST, instance=ipv4network)
         if form.is_valid():
             ipv4network = form.save(commit=False)
-            ipv4network.save()
-            return redirect('ipv4_detail', pk=ipv4network.pk)
+            try:
+                if ipaddress.ip_network(ipv4network.network):
+                    ipv4network.save()
+                else:
+                    pass
+            except:
+                return render(request, 'inventory/error_subnet.html')
+        return redirect('ipv4_detail', pk=ipv4network.pk)
     else:
         form = NetworkForm(instance=ipv4network)
     return render(request, 'inventory/ipv4_edit.html', {'form': form})
