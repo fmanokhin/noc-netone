@@ -97,14 +97,14 @@ function delconfirm() {
 </thead>
   <tr class="table-active">
     <td width='30%'>Сеть:</td>
-    <td>Описание:</td>
+    <td width='30%'>Описание:</td>
     <td>Детали:</td>
   </tr>
   {% for n in network %}
   <tr style="height: 30px;">
     <td width='30%'><a href="{% url 'ipv4_detail' pk=n.pk %}">{{ n }}</a</td>
-    <td>{{ n.comment }}</td>
-    <td>{{ n.detail }}</td>
+    <td>{{ n.comment|linebreaksbr }}</td>
+    <td>{{ n.detail|linebreaksbr }}</td>
   </tr>
   {% endfor %}
 </table>
