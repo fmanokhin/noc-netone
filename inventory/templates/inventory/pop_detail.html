@@ -122,7 +122,7 @@ function delconfirm() {
   <tr>
     <td width='30%'><a href="{% url 'ipv4_detail' pk=n.pk %}">{{ n }}</a</td>
     <td>{{ n.comment }}</td>
-    <td>{{ n.detail }}</td>
+    <td>{{ n.detail|linebreaksbr }}</td>
   </tr>
   {% endfor %}
 </table>
