@@ -36,4 +36,4 @@ class NetworkForm(forms.ModelForm):
 
     class Meta:
         model = Network
-        fields = ('network', 'status', 'segment', 'comment',)
+        fields = ('network', 'status', 'segment', 'comment', 'detail')

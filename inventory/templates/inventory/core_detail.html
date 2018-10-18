@@ -101,6 +101,7 @@ function delconfirm() {
   <thead>
   <tr>
     <th>Сети IPv4</th>
+    <th></th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -115,11 +116,13 @@ function delconfirm() {
   <tr class="table-active">
     <td width='30%'>Сеть:</td>
     <td>Описание:</td>
+    <td>Детали:</td>
   </tr>
   {% for n in network %}
   <tr>
     <td width='30%'><a href="{% url 'ipv4_detail' pk=n.pk %}">{{ n }}</a</td>
     <td>{{ n.comment }}</td>
+    <td>{{ n.detail }}</td>
   </tr>
   {% endfor %}
 </table>

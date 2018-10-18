@@ -127,6 +127,7 @@ class Network(models.Model):
     status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
     segment = models.CharField(max_length=9, choices=SEGMENT_CHOISES)
     comment = models.CharField(max_length=100, blank=True)
+    detail = models.TextField(max_length=1000, blank=True)
     tocore = models.ForeignKey(Core, on_delete=models.PROTECT, blank=True, null=True)
     topop = models.ForeignKey(Pop, on_delete=models.PROTECT, blank=True, null=True)
     tocustomer = models.ForeignKey(Customer, on_delete=models.PROTECT, blank=True, null=True)
