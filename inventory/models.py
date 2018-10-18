@@ -8,11 +8,11 @@ class Core(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.TextField(max_length=100, blank=True)
+    contacts = models.TextField(max_length=1000, blank=True)
     manager = models.CharField(max_length=100, blank=True)
     bandwidth = models.CharField(max_length=100, blank=True)
     vlans = models.CharField(max_length=100, blank=True)
-    comments = models.TextField(max_length=100, blank=True)
+    comments = models.TextField(max_length=1000, blank=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -32,11 +32,11 @@ class Pop(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.TextField(max_length=100, blank=True)
+    contacts = models.TextField(max_length=1000, blank=True)
     manager = models.CharField(max_length=100, blank=True)
     bandwidth = models.CharField(max_length=100, blank=True)
     vlans = models.CharField(max_length=100, blank=True)
-    comments = models.TextField(max_length=100, blank=True)
+    comments = models.TextField(max_length=1000, blank=True)
     devices = models.ManyToManyField('Device', blank=True)
     devices.help_text = ''
     devices.verbose_name = ''
@@ -65,9 +65,9 @@ class Customer(models.Model):
     title.help_text = ''
     title.verbose_name = ''
     address = models.CharField(max_length=100)
-    contacts = models.TextField(max_length=100, blank=True)
+    contacts = models.TextField(max_length=1000, blank=True)
     manager = models.CharField(max_length=100, blank=True)
-    comments = models.TextField(max_length=100, blank=True)
+    comments = models.TextField(max_length=1000, blank=True)
     upstream = models.ManyToManyField(Pop, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
