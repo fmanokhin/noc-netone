@@ -92,6 +92,19 @@ function delconfirm() {
   <thead>
   <tr>
     <th>Детали:</th>
+      <th>
+        {% if user.is_authenticated %}
+          {% for group in  request.user.groups.all %}
+            {%  if 'noc' == group.name %}
+              {% if hosts == 0 %}
+              <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'ipv4host_add' pk=ipv4network.pk %}'">
+              {% else %}
+              <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РАДИКТИР." onclick="location.href='{% url 'ipv4host_add' pk=ipv4network.pk %}'">
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </th>
   </tr>
   </thead>
   <tr>
