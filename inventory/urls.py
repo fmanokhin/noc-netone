@@ -92,9 +92,6 @@ urlpatterns = [
     url(r'^ipam/ipv4/(?P<pk>\d+)/remove/$', views.ipv4_remove, name='ipv4_remove'),
     url(r'^ipam/ipv4/(?P<pk>\d+)/sepor/$', views.ipv4_sepor, name='ipv4_sepor'),
 
-#IPv4 Детали подсети
-    url(r'^ipam/ipv4/(?P<pk>\d+)/host/add/$', views.ipv4host_add, name='ipv4host_add'),
-
 #Фильтры:
     url(r'^internet/filter/$', views.popfilter, name='popfilter'),
 ]

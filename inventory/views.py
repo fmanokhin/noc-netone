@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
-from .models import Pop, Core, Customer, Device, Network, Host
+from .models import Pop, Core, Customer, Device, Network
 from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm
 from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
 import ipaddress, iptools
@@ -504,13 +504,12 @@ def ipv4_list(request):
 @login_required
 def ipv4_detail(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
-    hosts = (Host.objects.filter(rootsubnet=pk)
     mask = (ipaddress.ip_network(ipv4network.network)).netmask
     gwfind = list(iptools.IpRangeList(ipv4network.network).__iter__())
     gw = gwfind[1]
     ipfrom = gwfind[2]
     ipto = gwfind[-2]
-    context = {'ipv4network': ipv4network, 'mask': mask, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto, 'hosts': hosts}
+    context = {'ipv4network': ipv4network, 'mask': mask, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto}
     return render(request, 'inventory/ipv4_detail.html', context)
 
 @login_required
@@ -566,16 +565,6 @@ def ipv4_remove(request, pk):
     ipv4network = get_object_or_404(Network, pk=pk)
     ipv4network.delete()
     return redirect('ipv4_list')
-
-#Хосты в IPv4-сетях
-@login_required
-def ipv4host_add(request, pk):
-    ipv4network = get_object_or_404(Network, pk=pk)
-    hosts = ipaddress.ip_network(ipv4network).hosts()
-    for i in hosts:
-        ipv4network.host_set.add(Host.objects.create(ip=i))
-    return redirect('ipv4_detail', pk)
-
 
 #Фильтрация
 @login_required
