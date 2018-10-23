@@ -39,7 +39,12 @@
     <td>{{ device.model|linebreaksbr }}</td>
     <td><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></h1></td>
     <td>{{ device.ipaddress|linebreaksbr }}</td>
-    <td>{{ device.geoaddress|linebreaksbr }}</td>
+    {% if device.tocore != None %}
+    <td>{{ device.tocore|linebreaksbr }}</td>
+    {% endif %}
+    {% if device.topop != None %}
+    <td>{{ device.topop|linebreaksbr }}</td>
+    {% endif %}
   </tr>
 {% endfor %}
 </table>

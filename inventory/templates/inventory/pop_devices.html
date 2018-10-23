@@ -28,11 +28,13 @@
     </td>
   </tr>
   {% for device in filter.qs %}
+  {% if device.status == "FREE" %}
   <tr>
     <td width="15%">Подключение:</td>
     <td><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></td>
     <td><input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'pop_device_add' poppk=pop.pk devicepk=device.pk %}'"></td>
   </tr>
+  {% endif %}
   {% endfor %}
 </table>
     {% endif %}

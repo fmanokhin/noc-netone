@@ -13,9 +13,6 @@ class Core(models.Model):
     bandwidth = models.CharField(max_length=100, blank=True)
     vlans = models.CharField(max_length=100, blank=True)
     comments = models.TextField(max_length=1000, blank=True)
-    devices = models.ManyToManyField('Device', blank=True)
-    devices.help_text = ''
-    devices.verbose_name = ''
     downstream = models.ManyToManyField('Pop', blank=True)
     downstream.help_text = ''
     downstream.verbose_name = ''
@@ -37,9 +34,6 @@ class Pop(models.Model):
     bandwidth = models.CharField(max_length=100, blank=True)
     vlans = models.CharField(max_length=100, blank=True)
     comments = models.TextField(max_length=1000, blank=True)
-    devices = models.ManyToManyField('Device', blank=True)
-    devices.help_text = ''
-    devices.verbose_name = ''
     upstream = models.ManyToManyField(Core, blank=True)
     upstream.help_text = ''
     upstream.verbose_name = ''
@@ -83,6 +77,13 @@ class Customer(models.Model):
         return self.title
 
 class Device(models.Model):
+    FREE = 'FREE'
+    BUSY = 'BUSY'
+    STATUS_CHOISES = (
+        (FREE, 'Свободно'),
+        (BUSY, 'Установлено'),
+    )
+    status = models.CharField(max_length=4, choices=STATUS_CHOISES, default=FREE)
     vendor = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     dnsname = models.CharField(max_length=100, blank=True)
@@ -92,12 +93,8 @@ class Device(models.Model):
     geoaddress = models.CharField(max_length=100)
     comments = models.CharField(max_length=100, blank=True)
     serialnum = models.CharField(max_length=100, blank=True)
-    coreaddress = models.ManyToManyField(Core, blank=True)
-    coreaddress.help_text = ''
-    coreaddress.verbose_name = ''
-    address = models.ManyToManyField(Pop, blank=True)
-    address.help_text = ''
-    address.verbose_name = ''
+    tocore = models.ForeignKey(Core, on_delete=models.PROTECT, blank=True, null=True)
+    topop = models.ForeignKey(Pop, on_delete=models.PROTECT, blank=True, null=True)
 
     def new_device(self):
         self.save()

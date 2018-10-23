@@ -36,13 +36,25 @@ function delconfirm() {
   </tr>
 </thead>
   <tr>
+    <td>Статус:</td>
+    <td>{{ device.status|linebreaksbr }}</td>
+  </tr>
+  <tr>
     <td>IP-адрес:</td>
     <td>{{ device.ipaddress|linebreaksbr }}</td>
   </tr>
+  {% if device.tocore != None %}
   <tr>
-    <td>Адрес:</td>
-    <td>{{ device.geoaddress|linebreaksbr }}</td>
+    <td>Опорный узел:</td>
+    <td>{{ device.tocore|linebreaksbr }}</td>
   </tr>
+  {% endif %}
+  {% if device.topop != None %}
+  <tr>
+    <td>Точка присутствия:</td>
+    <td>{{ device.topop|linebreaksbr }}</td>
+  </tr>
+  {% endif %}
   <tr>
     <td>Комментарий:</td>
     <td>{{ device.comments|linebreaksbr }}</td>

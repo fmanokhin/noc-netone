@@ -5,19 +5,19 @@
 <form method="POST">{% csrf_token %}
 <table class="table table-sm table-borderless table-hover" width='100%' style="margin-top: 10px">
   <thead>
-    <th>Коммутатор:</th>
+    <th>Устройство:</th>
   </thead>
   <tr>
     <td width="15%">Имя:</td>
     <td>{{ form.dnsname }}</td>
   </tr>
   <tr>
-    <td>IP-адрес:</td>
-    <td>{{ form.ipaddress }}</td>
+    <td>Статус:</td>
+    <td>{{ form.status }}</td>
   </tr>
   <tr>
-    <td>Адрес:</td>
-    <td>{{ form.geoaddress }}</td>
+    <td>IP-адрес:</td>
+    <td>{{ form.ipaddress }}</td>
   </tr>
   <tr>
     <td>Комментарий:</td>

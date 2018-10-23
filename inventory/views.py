@@ -133,14 +133,18 @@ def core_devices(request, pk):
 
 @login_required
 def core_device_remove(request, corepk, devicepk):
-    Device.objects.get(pk=devicepk).core_set.remove(Core.objects.get(pk=corepk))
     Core.objects.get(pk=corepk).device_set.remove(Device.objects.get(pk=devicepk))
+    device = Device.objects.get(pk=devicepk)
+    device.status = 'FREE'
+    device.save(update_fields=['status'])
     return redirect('core_detail', corepk)
 
 @login_required
 def core_device_add(request, corepk, devicepk):
-    Device.objects.get(pk=devicepk).core_set.add(Core.objects.get(pk=corepk))
     Core.objects.get(pk=corepk).device_set.add(Device.objects.get(pk=devicepk))
+    device = Device.objects.get(pk=devicepk)
+    device.status = 'BUSY'
+    device.save(update_fields=['status'])
     return redirect('core_detail', corepk)
 
 # На Корах (даунстримы)
@@ -229,14 +233,18 @@ def pop_devices(request, pk):
 
 @login_required
 def pop_device_remove(request, poppk, devicepk):
-    Device.objects.get(pk=devicepk).pop_set.remove(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).device_set.remove(Device.objects.get(pk=devicepk))
+    device = Device.objects.get(pk=devicepk)
+    device.status = 'FREE'
+    device.save(update_fields=['status'])
     return redirect('pop_detail', poppk)
 
 @login_required
 def pop_device_add(request, poppk, devicepk):
-    Device.objects.get(pk=devicepk).pop_set.add(Pop.objects.get(pk=poppk))
     Pop.objects.get(pk=poppk).device_set.add(Device.objects.get(pk=devicepk))
+    device = Device.objects.get(pk=devicepk)
+    device.status = 'BUSY'
+    device.save(update_fields=['status'])
     return redirect('pop_detail', poppk)
 
 

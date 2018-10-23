@@ -28,11 +28,13 @@
     </td>
   </tr>
   {% for device in filter.qs %}
+  {% if device.status == "FREE" %}
   <tr>
-    <td>Устройство:</td>
+    <td>Устройство</td>
     <td><a href="{% url 'device_detail' pk=device.pk %}">{{ device.dnsname }}</a></td>
     <td><input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px;" type="button" value="ДОБАВИТЬ" onclick="location.href='{% url 'core_device_add' corepk=core.pk devicepk=device.pk %}'"></td>
   </tr>
+  {% endif %}
   {% endfor %}
 </table>
     {% endif %}
