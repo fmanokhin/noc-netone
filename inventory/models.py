@@ -90,7 +90,6 @@ class Device(models.Model):
     dnsname.help_text = ''
     dnsname.verbose_name = ''
     ipaddress = models.CharField(max_length=100)
-    geoaddress = models.CharField(max_length=100)
     comments = models.CharField(max_length=100, blank=True)
     serialnum = models.CharField(max_length=100, blank=True)
     tocore = models.ForeignKey(Core, on_delete=models.PROTECT, blank=True, null=True)
