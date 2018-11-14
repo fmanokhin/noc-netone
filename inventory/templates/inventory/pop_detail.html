@@ -200,7 +200,6 @@ function delconfirm() {
   <thead>
   <tr>
     <th>Клиенты:</th>
-    <th></th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -214,7 +213,6 @@ function delconfirm() {
 </thead>
   {% for z in downstream %}
   <tr>
-    <td width='10%'>Клиент:</td>
     <td><a href="{% url 'customer_detail' pk=z.pk %}">{{ z }}</a</td>
     <td>{{ z.switch|linebreaksbr }} <b>vlan:</b>{{ z.vlans|linebreaksbr }}</td>
   </tr>
