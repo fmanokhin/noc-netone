@@ -214,8 +214,8 @@ function delconfirm() {
 </thead>
   {% for z in downstream %}
   <tr>
-    <td width='15%'>Клиент:</td>
-    <td width='30%'><a href="{% url 'customer_detail' pk=z.pk %}">{{ z }}</a</td>
+    <td width='10%'>Клиент:</td>
+    <td><a href="{% url 'customer_detail' pk=z.pk %}">{{ z }}</a</td>
     <td>{{ z.switch|linebreaksbr }} <b>vlan:</b>{{ z.vlans|linebreaksbr }}</td>
   </tr>
   {% endfor %}
