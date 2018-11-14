@@ -131,6 +131,7 @@ function delconfirm() {
   <thead>
   <tr>
     <th>Downstreams</th>
+    <th></th>
     <th>
       {% if user.is_authenticated %}
         {% for group in  request.user.groups.all %}
@@ -142,10 +143,16 @@ function delconfirm() {
     </th>
   </tr>
   </thead>
+  <tr class="table-active">
+    <td>Подключение</td>
+    <td>VLAN</td>
+    <td>Адрес</td>
+  </tr>
   {% for i in downstream %}
   <tr>
-    <td width='30%'>Подключение:</td>
     <td><a href="{% url 'pop_detail' pk=i.pk %}">{{ i }}</a></td>
+    <td width="200px">{{ i.vlans|linebreaksbr }}</td>
+    <td>{{ i.address|linebreaksbr }}</td>
   </tr>
   {% endfor %}
 </table>
