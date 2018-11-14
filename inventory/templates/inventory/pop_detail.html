@@ -211,6 +211,10 @@ function delconfirm() {
     </th>
   </tr>
 </thead>
+  <tr class="table-active">
+    <td>Клиент:</td>
+    <td>Подключение:</td>
+  </tr>
   {% for z in downstream %}
   <tr>
     <td><a href="{% url 'customer_detail' pk=z.pk %}">{{ z }}</a</td>
