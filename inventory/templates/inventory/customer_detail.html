@@ -144,13 +144,25 @@ function delconfirm() {
     </tr>
   </thead>
   <tr class="table-active">
-    <td width="300px">ID канала:</td>
+    <td width="150px">ID канала:</td>
+    <td width="300px">Точка А</td>
+    <td width="300px">Точка B</td>
     <td width="300px">VLAN:</td>
   </tr>
   {% for l2vpn in l2vpns %}
   {% if l2vpn.off_date == None %}
   <tr>
     <td><a href="{% url 'l2vpn_detail' pk=l2vpn.pk %}">{{ l2vpn.channelid }}</a></td>
+    {% if l2vpn.pointA_id != None %}
+    <td><a href="{% url 'pop_detail' pk=l2vpn.pointA_id %}">{{ l2vpn.pointA }}</a></td>
+    {% elif l2vpn.coreA_id != None %}
+    <td><a href="{% url 'core_detail' pk=l2vpn.coreA_id %}">{{ l2vpn.coreA }}</a></td>
+    {% endif %}
+    {% if l2vpn.pointB_id != None %}
+    <td><a href="{% url 'pop_detail' pk=l2vpn.pointB_id %}">{{ l2vpn.pointB }}</a></td>
+    {% elif l2vpn.coreB_id != None %}
+    <td><a href="{% url 'core_detail' pk=l2vpn.coreB_id %}">{{ l2vpn.coreB }}</a></td>
+    {% endif %}
     <td>{{ l2vpn.vlan }}</td>
   </tr>
   {% endif %}
