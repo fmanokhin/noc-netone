@@ -1,0 +1,96 @@
+{% extends 'channels/base_channels.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<script>
+function delconfirm() {
+  var user_choice = window.confirm('Вы уверены?');
+  if(user_choice==true) {
+    window.location='{% url 'l2vpn_remove' pk=l2vpn.pk %}';
+  } else {
+    return false;
+  }
+}
+</script>
+{% endif %}
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+  <tr>
+    <th>L2VPN:</th>
+    <th>
+      {% if user.is_authenticated %}
+        {% for group in  request.user.groups.all %}
+          {%  if 'noc' == group.name %}
+            <input class="btn btn-dark btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px" type="button" value="РЕДАКТИР." onclick="location.href='{% url 'l2vpn_edit' pk=l2vpn.pk %}'">
+            <input class="btn btn-danger btn-sm" style="float: right; height: 32px; width: 92px; margin-top: 10px; margin-right: 10px;" type="button" value="УДАЛИТЬ" onclick="delconfirm()">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </th>
+  </tr>
+  </thead>
+  <tr>
+    <td>ID:</td>
+    <td>{{ l2vpn.channelid|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Клиент:</td>
+    <td><a href="{% url 'customer_detail' pk=l2vpn.customer_id %}">{{ l2vpn.customer }}</a></td>
+  </tr>
+  <tr>
+    <td>Точка А:</td>
+    {% if l2vpn.pointA_id != None %}
+    <td><a href="{% url 'pop_detail' pk=l2vpn.pointA_id %}">{{ l2vpn.pointA }}</a></td>
+    {% elif l2vpn.coreA_id != None %}
+    <td><a href="{% url 'core_detail' pk=l2vpn.coreA_id %}">{{ l2vpn.coreA }}</a></td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td>Коммутатора А:</td>
+    {% if l2vpn.deviceA != None %}
+    <td><a href="{% url 'device_detail' pk=l2vpn.deviceA_id %}">{{ l2vpn.deviceA|linebreaksbr }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td>Порт:</td>
+    <td>{{ l2vpn.portA }}</td>
+  </tr>
+  <tr>
+    <td>Точка B:</td>
+    {% if l2vpn.pointB_id != None %}
+    <td><a href="{% url 'pop_detail' pk=l2vpn.pointB_id %}">{{ l2vpn.pointB }}</a></td>
+    {% elif l2vpn.coreB_id != None %}
+    <td><a href="{% url 'core_detail' pk=l2vpn.coreB_id %}">{{ l2vpn.coreB }}</a></td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td>Коммутатора B:</td>
+    {% if l2vpn.deviceB != None %}
+    <td><a href="{% url 'device_detail' pk=l2vpn.deviceB_id %}">{{ l2vpn.deviceB|linebreaksbr }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td>Порт:</td>
+    <td>{{ l2vpn.portB }}</td>
+  </tr>
+  <tr>
+    <td>VLAN:</td>
+    <td>{{ l2vpn.vlan }}</td>
+  </tr>
+  <tr>
+    <td>Примечание:</td>
+    <td>{{ l2vpn.comments|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <td>Дата ВКЛ:</td>
+    <td>{{ l2vpn.on_date|linebreaksbr }}</td>
+  </tr>
+  {% if l2vpn.off_date != None %}
+  <tr>
+    <td>Дата ОТКЛ:</td>
+    <td>{{ l2vpn.off_date|linebreaksbr }}</td>
+  </tr>
+  {% endif %}
+</table>
+{% endblock %}

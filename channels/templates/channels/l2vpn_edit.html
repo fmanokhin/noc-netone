@@ -1,0 +1,85 @@
+{% extends 'channels/base_channels.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<script>
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+</script>
+
+<form method="POST">{% csrf_token %}
+  <table class="table table-sm table-borderless table-hover" width='100%' style="margin-top: 10px">
+    <thead>
+      <th>L2VPN:</th>
+    </thead>
+    <tr>
+      <td width="15%">ID:</td>
+      <td>{{ form.channelid }}</td>
+    </tr>
+    <tr>
+      <td>Клиент:</td>
+      <td>
+        {{ form.customer }}
+      </td>
+    </tr>
+    <tr>
+      <td>Точка А</td>
+      <td>
+        {{ form.pointA }}<p>
+        <p>
+        {{ form.coreA }}
+      </td>
+    </tr>
+    <tr>
+      <td>Коммутатор А</td>
+      <td>{{ form.deviceA }}</td>
+    </tr>
+    <tr>
+      <td>Порт:</td>
+      <td>{{ form.portA }}</td>
+    </tr>
+    <tr>
+      <td>Точка B</td>
+      <td>
+        {{ form.pointB }}<p>
+        <p>
+        {{ form.coreB }}
+      </td>
+      <tr>
+        <td>Коммутатор B</td>
+        <td>{{ form.deviceB }}</td>
+      </tr>
+      <tr>
+        <td>Порт:</td>
+        <td>{{ form.portB }}</td>
+      </tr>
+    </tr>
+    <tr>
+      <td>VLAN</td>
+      <td>{{ form.vlan }}</td>
+    </tr>
+    <tr>
+      <td>Примечание</td>
+      <td>{{ form.comments }}</td>
+    </tr>
+    <tr>
+      <td>Дата ВКЛ.</td>
+      <td>{{ form.on_date }}</td>
+    </tr>
+    <tr>
+      <td>Дата ОТКЛ.</td>
+      <td>{{ form.off_date }}</td>
+    </tr>
+  </table>
+  <table style="margin-button: 10px">
+    <tr>
+      <td>
+        <button class="btn btn-dark btn-sm" style="height: 32px; width: 100px; margin-top: 10px" type="submit">СОХРАНИТЬ</button>
+        <input class="btn btn-dark btn-sm" style="height: 32px; width: 100px; margin-top: 10px" type="button" value="ОТМЕНА" onclick="window.history.back()">
+      </td>
+    </tr>
+    </table>
+</form>
+<p>
+{% endif %}
+{% endblock %}

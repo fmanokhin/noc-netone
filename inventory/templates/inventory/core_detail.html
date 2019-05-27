@@ -144,9 +144,9 @@ function delconfirm() {
   </tr>
   </thead>
   <tr class="table-active">
-    <td>Подключение</td>
-    <td>VLAN</td>
-    <td>Адрес</td>
+    <td width="300px">Подключение</td>
+    <td width="300px">VLAN</td>
+    <td width="300px">Адрес</td>
   </tr>
   {% for i in downstream %}
   <tr>
@@ -154,6 +154,28 @@ function delconfirm() {
     <td width="200px">{{ i.vlans|linebreaksbr }}</td>
     <td>{{ i.address|linebreaksbr }}</td>
   </tr>
+  {% endfor %}
+</table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+    <tr>
+      <th>Каналы L2VPN:</th>
+    </tr>
+  </thead>
+  <tr class="table-active">
+    <td width="300px">ID канала:</td>
+    <td width="300px">VLAN:</td>
+    <td width="300px">Клиент:</td>
+  </tr>
+  {% for l2vpn in l2vpns %}
+  {% if l2vpn.off_date == None %}
+  <tr>
+    <td><a href="{% url 'l2vpn_detail' pk=l2vpn.pk %}">{{ l2vpn.channelid }}</a></td>
+    <td>{{ l2vpn.vlan }}</td>
+    <td><a href="{% url 'customer_detail' pk=l2vpn.customer_id %}">{{ l2vpn.customer }}</a></td>
+  </tr>
+  {% endif %}
   {% endfor %}
 </table>
 {% endblock %}

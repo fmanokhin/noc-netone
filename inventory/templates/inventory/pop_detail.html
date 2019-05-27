@@ -199,7 +199,7 @@ function delconfirm() {
 <table class="table table-sm table-borderless table-hover" width='100%'>
   <thead>
   <tr>
-    <th>Клиенты:</th>
+    <th>Клиенты Интернет:</th>
     <th></th>
     <th>
       {% if user.is_authenticated %}
@@ -213,9 +213,9 @@ function delconfirm() {
   </tr>
 </thead>
   <tr class="table-active">
-    <td>Клиент:</td>
-    <td>Коммутатор:</td>
-    <td>VLAN:</td>
+    <td width="300px">Клиент:</td>
+    <td width="300px">Коммутатор:</td>
+    <td width="300px">VLAN:</td>
   </tr>
   {% for z in downstream %}
   <tr>
@@ -223,6 +223,28 @@ function delconfirm() {
     <td>{{ z.switch|linebreaksbr }}</td>
     <td>{{ z.vlans|linebreaksbr }}</td>
   </tr>
+  {% endfor %}
+</table>
+
+<table class="table table-sm table-borderless table-hover" width='100%'>
+  <thead>
+    <tr>
+      <th>Клиенты L2VPN:</th>
+    </tr>
+  </thead>
+  <tr class="table-active">
+    <td width="300px">Клиент:</td>
+    <td width="300px">ID канала:</td>
+    <td width="300px">VLAN:</td>
+  </tr>
+  {% for l2vpn in l2vpns %}
+  {% if l2vpn.off_date == None %}
+  <tr>
+    <td><a href="{% url 'customer_detail' pk=l2vpn.customer_id %}">{{ l2vpn.customer }}</a></td>
+    <td><a href="{% url 'l2vpn_detail' pk=l2vpn.pk %}">{{ l2vpn.channelid }}</a></td>
+    <td>{{ l2vpn.vlan }}</td>
+  </tr>
+  {% endif %}
   {% endfor %}
 </table>
 {% endblock %}

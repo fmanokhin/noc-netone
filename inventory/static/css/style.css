@@ -151,3 +151,7 @@ ul[data-menu-style="vertical"] > li {
 ul[data-menu-style="vertical"] li a:hover {
     background: #272727 !important;
 }
+
+.l2vpn-port {
+  width:100px;
+}

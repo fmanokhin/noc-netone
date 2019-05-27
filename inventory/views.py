@@ -6,6 +6,9 @@ from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, Devi
 from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
 import ipaddress, iptools
 
+from channels.models import L2VPN
+from django.db.models import Q
+
 # Create your views here.
 # Отобразить точки присутствия
 @login_required
@@ -25,7 +28,9 @@ def pop_detail(request, pk):
     downstream = Pop.objects.get(pk=pk).customer_set.all()
     otherpopsdownstream = Pop.objects.get(pk=pk).otherpopsdownstream.all()
     otherpopsupstream = Pop.objects.get(pk=pk).otherpopsupstream.all()
-    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream, 'otherpopsdownstream': otherpopsdownstream, 'otherpopsupstream': otherpopsupstream}
+    #####добавляем каналы L2VPN для данной точки
+    l2vpns = L2VPN.objects.filter(Q(pointA=pk) | Q(pointB=pk))
+    context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream, 'otherpopsdownstream': otherpopsdownstream, 'otherpopsupstream': otherpopsupstream, 'l2vpns': l2vpns}
     return render(request, 'inventory/pop_detail.html', context)
 
 # Создать точку присутствия
@@ -80,7 +85,9 @@ def core_detail(request, pk):
     device = Core.objects.get(pk=pk).device_set.all()
     network = Core.objects.get(pk=pk).network_set.all()
     downstream = Core.objects.get(pk=pk).pop_set.all()
-    context = {'core': core, 'device': device, 'network': network, 'downstream': downstream}
+    #####добавляем каналы L2VPN для данной точки
+    l2vpns = L2VPN.objects.filter(Q(coreA=pk) | Q(coreB=pk))
+    context = {'core': core, 'device': device, 'network': network, 'downstream': downstream, 'l2vpns': l2vpns}
     return render(request, 'inventory/core_detail.html', context)
 
 # Создать опорный узел
@@ -399,7 +406,8 @@ def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     upstream = Customer.objects.get(pk=pk).pop_set.all()
     network = Customer.objects.get(pk=pk).network_set.all()
-    context = {'customer': customer, 'upstream': upstream, 'network': network}
+    l2vpns = L2VPN.objects.filter(Q(customer=pk))
+    context = {'customer': customer, 'upstream': upstream, 'network': network, 'l2vpns': l2vpns}
     return render(request, 'inventory/customer_detail.html', context)
 
 # Создать клиента
