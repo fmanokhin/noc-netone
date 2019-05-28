@@ -2,6 +2,7 @@
 *~
 __pycache__
 inventory/migrations
+channels/migrations
 nocvenv
 nocnetone/settings.py
 .DS_Store

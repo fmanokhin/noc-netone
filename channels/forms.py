@@ -8,7 +8,7 @@ class L2VPNForm(forms.ModelForm):
 
     class Meta:
         model = L2VPN
-        fields = ('channelid','customer', 'coreA', 'coreB', 'pointA', 'pointB', 'deviceA', 'deviceB', 'portA', 'portB', 'vlan', 'comments', 'on_date', 'off_date',)
+        fields = ('channelid','customer', 'coreA', 'coreB', 'pointA', 'pointB', 'deviceA', 'deviceB', 'portA', 'portB', 'vlan', 'speed', 'comments', 'on_date', 'off_date',)
         widgets = {
             'customer': Select(attrs={'class': 'js-example-basic-single'}),
             'coreA': Select(attrs={'class': 'js-example-basic-single'}),

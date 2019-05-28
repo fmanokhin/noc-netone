@@ -16,6 +16,7 @@ class L2VPN(models.Model):
         portA = models.CharField(max_length=2, blank=True, null=True)
         portB = models.CharField(max_length=2, blank=True, null=True)
         vlan = models.CharField(max_length=4, blank=True, null=True)
+        speed = models.CharField(max_length=4, blank=True, null=True)
         comments = models.TextField(max_length=1000, blank=True)
         on_date = models.DateField(blank=True, null=True)
         off_date = models.DateField(blank=True, null=True)

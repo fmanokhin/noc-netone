@@ -9,7 +9,7 @@
       <th>Точка А</th>
       <th>Точка B</th>
       <th>VLAN</th>
-      <th>Примечание</th>
+      <th>Скорость</th>
       <th>
         {% if user.is_authenticated %}
           {% for group in  request.user.groups.all %}
@@ -38,7 +38,7 @@
     <td width="200px"><a href="{% url 'core_detail' pk=l2vpn.coreB_id %}">{{ l2vpn.coreB }}</a></td>
     {% endif %}
     <td width="200px">{{ l2vpn.vlan }}</td>
-    <td width="200px">{{ l2vpn.comments }}</td>
+    <td width="200px">{{ l2vpn.speed }}</td>
     <!---
     ОТКЛЮЧЕННЫЕ КАНАЛЫ:
     --->
@@ -56,7 +56,7 @@
     <td width="200px"><a href="{% url 'core_detail' pk=l2vpn.coreB_id %}"><font color="#BDBDBD">{{ l2vpn.coreB }}</a></td>
     {% endif %}
     <td width="200px"><font color="#BDBDBD">{{ l2vpn.vlan }}</td>
-    <td width="200px"><font color="#BDBDBD">{{ l2vpn.comments }}</td>
+    <td width="200px"><font color="#BDBDBD">{{ l2vpn.speed }}</td>
   {% endif %}
 </tr>
 {% endfor %}
