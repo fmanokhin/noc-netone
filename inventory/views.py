@@ -1,16 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
-from .models import Pop, Core, Customer, Device, Network
-from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm, NetworkForm
+from .models import Pop, Core, Customer, Device
+from .forms import PopForm, CoreForm, CustomerForm, CustomerConnectionForm, DeviceForm
 from .filters import PopFilter, CoreFilter, CustomerFilter, DeviceFilter, NetworkFilter, NetworkFilterNoStut
-import ipaddress, iptools
+
 
 from channels.models import L2VPN
+from ipam.models import Network
+from ipam.forms import NetworkForm
+
 from django.db.models import Q
 
-# Create your views here.
-# Отобразить точки присутствия
+#Create your views here.
+#Отобразить точки присутствия
 @login_required
 def pop_list(request):
     pops = Pop.objects.all()
@@ -18,7 +21,7 @@ def pop_list(request):
     context = {'pops': pops, 'filter': popfilter}
     return render(request, 'inventory/pop_list.html', context)
 
-# Отображение данных по точке присутствия
+#Отображение данных по точке присутствия
 @login_required
 def pop_detail(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -33,7 +36,7 @@ def pop_detail(request, pk):
     context = {'pop': pop, 'device': device, 'network': network, 'upstream': upstream, 'downstream': downstream, 'otherpopsdownstream': otherpopsdownstream, 'otherpopsupstream': otherpopsupstream, 'l2vpns': l2vpns}
     return render(request, 'inventory/pop_detail.html', context)
 
-# Создать точку присутствия
+#Создать точку присутствия
 @login_required
 def pop_new(request):
     if request.method == "POST":
@@ -46,7 +49,7 @@ def pop_new(request):
         form = PopForm()
     return render(request, 'inventory/pop_edit.html', {'form': form})
 
-# Редактировать точку присутствия
+#Редактировать точку присутствия
 @login_required
 def pop_edit(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -70,7 +73,7 @@ def pop_remove(request, pk):
         return render(request, 'inventory/error_delete.html')
     return redirect('pop_list')
 
-# Отобразить опорные узлы
+#Отобразить опорные узлы
 @login_required
 def core_list(request):
     cores = Core.objects.all()
@@ -78,7 +81,7 @@ def core_list(request):
     context = {'cores': cores, 'filter': corefilter}
     return render(request, 'inventory/core_list.html', context)
 
-# Отображение данных по опорному узлу
+#Отображение данных по опорному узлу
 @login_required
 def core_detail(request, pk):
     core = get_object_or_404(Core, pk=pk)
@@ -90,7 +93,7 @@ def core_detail(request, pk):
     context = {'core': core, 'device': device, 'network': network, 'downstream': downstream, 'l2vpns': l2vpns}
     return render(request, 'inventory/core_detail.html', context)
 
-# Создать опорный узел
+#Создать опорный узел
 @login_required
 def core_new(request):
     if request.method == "POST":
@@ -103,7 +106,7 @@ def core_new(request):
         form = CoreForm()
     return render(request, 'inventory/core_edit.html', {'form': form})
 
-# Редактировать опорный узел
+#Редактировать опорный узел
 @login_required
 def core_edit(request, pk):
     core = get_object_or_404(Core, pk=pk)
@@ -127,8 +130,8 @@ def core_remove(request, pk):
         return render(request, 'inventory/error_delete.html')
     return redirect('core_list')
 
-# Связки
-# На Корах (оборудование)
+#Связки
+#На Корах (оборудование)
 @login_required
 def core_devices(request, pk):
     core = get_object_or_404(Core, pk=pk)
@@ -154,7 +157,7 @@ def core_device_add(request, corepk, devicepk):
     device.save(update_fields=['status'])
     return redirect('core_detail', corepk)
 
-# На Корах (даунстримы)
+#На Корах (даунстримы)
 @login_required
 def core_downstreams(request, pk):
     core = get_object_or_404(Core, pk=pk)
@@ -176,7 +179,7 @@ def core_downstreams_add(request, corepk, poppk):
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('core_detail', corepk)
 
-# На Корах (IPv4)
+#На Корах (IPv4)
 @login_required
 def core_ipv4networks(request, pk):
     core = get_object_or_404(Core, pk=pk)
@@ -202,7 +205,7 @@ def core_ipv4network_add(request, corepk, networkpk):
     network.save(update_fields=['status'])
     return redirect('core_detail', corepk)
 
-# На Точках присутствия (IPv4)
+#На Точках присутствия (IPv4)
 @login_required
 def pop_ipv4networks(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -228,7 +231,7 @@ def pop_ipv4network_add(request, poppk, networkpk):
     network.save(update_fields=['status'])
     return redirect('pop_detail', poppk)
 
-# На Точках присутствия (оборудование)
+#На Точках присутствия (оборудование)
 @login_required
 def pop_devices(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -255,7 +258,7 @@ def pop_device_add(request, poppk, devicepk):
     return redirect('pop_detail', poppk)
 
 
-# На Точках присутствия (апстримы)
+#На Точках присутствия (апстримы)
 @login_required
 def pop_upstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -277,7 +280,7 @@ def pop_upstreams_add(request, poppk, corepk):
     Pop.objects.get(pk=poppk).core_set.add(Core.objects.get(pk=corepk))
     return redirect('pop_detail', poppk)
 
-# На Точках присутствия (апстрим- другие точки)
+#На Точках присутствия (апстрим- другие точки)
 @login_required
 def otherpop_upstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -299,7 +302,7 @@ def otherpop_upstreams_add(request, otherpoppk, poppk):
     Pop.objects.get(pk=poppk).otherpops_downstream.add(Pop.objects.get(pk=otherpoppk))
     return redirect('pop_detail', poppk)
 
-# На Точках присутсвия (даунстримы-другие точки)
+#На Точках присутсвия (даунстримы-другие точки)
 @login_required
 def otherpop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -321,7 +324,7 @@ def otherpop_downstreams_add(request, otherpoppk, poppk):
     Pop.objects.get(pk=poppk).otherpops_upstream.add(Pop.objects.get(pk=otherpoppk))
     return redirect('pop_detail', poppk)
 
-# На Точках присутствия (даунстримы-клиенты)
+#На Точках присутствия (даунстримы-клиенты)
 @login_required
 def pop_downstreams(request, pk):
     pop = get_object_or_404(Pop, pk=pk)
@@ -343,7 +346,7 @@ def pop_downstreams_add(request, customerpk, poppk):
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
     return redirect('pop_detail', poppk)
 
-# На Клиентах (апстримы)
+#На Клиентах (апстримы)
 @login_required
 def customer_upstreams(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -365,7 +368,7 @@ def customer_upstreams_add(request, customerpk, poppk):
     Customer.objects.get(pk=customerpk).pop_set.add(Pop.objects.get(pk=poppk))
     return redirect('customer_detail', customerpk)
 
-# На Клиентах (IPv4)
+#На Клиентах (IPv4)
 @login_required
 def customer_ipv4networks(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -391,8 +394,8 @@ def customer_ipv4network_add(request, customerpk, networkpk):
     network.save(update_fields=['status'])
     return redirect('customer_detail', customerpk)
 
-# Клиенты
-# Отобразить всех клиентов
+#Клиенты
+#Отобразить всех клиентов
 @login_required
 def customer_list(request):
     customers = Customer.objects.all()
@@ -400,7 +403,7 @@ def customer_list(request):
     context = {'customers': customers, 'filter': customerfilter}
     return render(request, 'inventory/customer_list.html', context)
 
-# Отображение данных по клиенту
+#Отображение данных по клиенту
 @login_required
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -410,7 +413,7 @@ def customer_detail(request, pk):
     context = {'customer': customer, 'upstream': upstream, 'network': network, 'l2vpns': l2vpns}
     return render(request, 'inventory/customer_detail.html', context)
 
-# Создать клиента
+#Создать клиента
 @login_required
 def customer_new(request):
     if request.method == "POST":
@@ -423,7 +426,7 @@ def customer_new(request):
         form = CustomerForm()
     return render(request, 'inventory/customer_edit.html', {'form': form})
 
-# Редактировать клиента
+#Редактировать клиента
 @login_required
 def customer_edit(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -461,8 +464,8 @@ def customer_connection(request, pk):
         form = CustomerConnectionForm(instance=customer)
     return render(request, 'inventory/customer_connection.html', {'form': form})
 
-# Оборудование
-# Список всего оборудования
+#Оборудование
+#Список всего оборудования
 @login_required
 def device_list(request):
     devices = Device.objects.all()
@@ -488,7 +491,7 @@ def device_new(request):
         form = DeviceForm()
     return render(request, 'inventory/device_edit.html', {'form': form})
 
-# Редактировать устройство
+#Редактировать устройство
 @login_required
 def device_edit(request, pk):
     device = get_object_or_404(Device, pk=pk)
@@ -502,85 +505,12 @@ def device_edit(request, pk):
         form = DeviceForm(instance=device)
     return render(request, 'inventory/device_edit.html', {'form': form})
 
-# Удалить устройство
+#Удалить устройство
 @login_required
 def device_remove(request, pk):
     device = get_object_or_404(Device, pk=pk)
     device.delete()
     return redirect('device_list')
-
-#IPv4
-@login_required
-def ipv4_list(request):
-    ipv4networks = Network.objects.all()
-    ipv4networkfilter = NetworkFilter(request.POST, queryset=ipv4networks)
-    context = {'ipv4networks': ipv4networks, 'filter': ipv4networkfilter}
-    return render(request, 'inventory/ipv4_list.html', context)
-
-@login_required
-def ipv4_detail(request, pk):
-    ipv4network = get_object_or_404(Network, pk=pk)
-    mask = (ipaddress.ip_network(ipv4network.network)).netmask
-    gwfind = list(iptools.IpRangeList(ipv4network.network).__iter__())
-    gw = gwfind[1]
-    ipfrom = gwfind[2]
-    ipto = gwfind[-2]
-    context = {'ipv4network': ipv4network, 'mask': mask, 'gw': gw, 'ipfrom': ipfrom, 'ipto': ipto}
-    return render(request, 'inventory/ipv4_detail.html', context)
-
-@login_required
-def ipv4_new(request):
-    if request.method == "POST":
-        form = NetworkForm(request.POST)
-        if form.is_valid():
-            ipv4network = form.save(commit=False)
-            try:
-                if ipaddress.ip_network(ipv4network.network):
-                    ipv4network.save()
-                else:
-                    pass
-            except:
-                 return render(request, 'inventory/error_subnet.html')
-        return redirect('ipv4_detail', pk=ipv4network.pk)
-    else:
-        form = NetworkForm()
-    return render(request, 'inventory/ipv4_edit.html', {'form': form})
-
-@login_required
-def ipv4_edit(request, pk):
-    ipv4network = get_object_or_404(Network, pk=pk)
-    if request.method == "POST":
-        form = NetworkForm(request.POST, instance=ipv4network)
-        if form.is_valid():
-            ipv4network = form.save(commit=False)
-            try:
-                if ipaddress.ip_network(ipv4network.network):
-                    ipv4network.save()
-                else:
-                    pass
-            except:
-                return render(request, 'inventory/error_subnet.html')
-        return redirect('ipv4_detail', pk=ipv4network.pk)
-    else:
-        form = NetworkForm(instance=ipv4network)
-    return render(request, 'inventory/ipv4_edit.html', {'form': form})
-
-@login_required
-def ipv4_sepor(request, pk):
-    ipv4network = get_object_or_404(Network, pk=pk)
-    subnets = list(ipaddress.ip_network(ipv4network).subnets())
-    for subnet in subnets:
-        Network.objects.create(network=subnet, segment=ipv4network.segment)
-    ipv4network.delete()
-    ipv4networks = Network.objects.all()
-    return redirect('ipv4_list')
-
-#Удалить подсеть
-@login_required
-def ipv4_remove(request, pk):
-    ipv4network = get_object_or_404(Network, pk=pk)
-    ipv4network.delete()
-    return redirect('ipv4_list')
 
 #Фильтрация
 @login_required

@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/internet/cores/'}),
     url(r'', include('inventory.urls')),
     url(r'', include('channels.urls')),
+    url(r'', include('ipam.urls')),
 ]

@@ -1,5 +1,7 @@
 import django_filters
-from .models import Pop, Core, Customer, Device, Network
+from .models import Pop, Core, Customer, Device
+
+from ipam.models import Network
 
 class PopFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr='icontains', label='')
